@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from './componentes/login/login.component';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'y';
+  title: any;
+
+  constructor(public dialog: MatDialog) {}
+
+  openPopup(): void {
+    this.dialog.open(LoginComponent);
+  }
 }

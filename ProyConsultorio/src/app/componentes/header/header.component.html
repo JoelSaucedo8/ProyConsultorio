@@ -1,0 +1,11 @@
+<header>
+  <div class="logo-title">
+    <img src="assets/imagenes/logoClinic.PNG" alt="Logo Clínica" class="logo" />
+    <h1>Clínica Virtual</h1>
+  </div>
+  <div *ngIf="isLoggedIn">
+    <span>{{ userName }}</span>
+    <button (click)="logout()">Cerrar sesión</button>
+    <span class="info-icon" title="Tipo de usuario">ℹ️</span>
+  </div>
+</header>

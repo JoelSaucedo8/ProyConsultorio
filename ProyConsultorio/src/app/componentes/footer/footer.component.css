@@ -1,0 +1,23 @@
+.footer {
+    background-color: #52b176; /* Color de fondo verde oscuro */
+    color: black; 
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+  
+    .social-links {
+      margin-top: 10px;
+  
+      a {
+        color: black;
+        margin: 0 5px;
+        text-decoration: none;
+        font-size: 16px;
+      }
+  
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
