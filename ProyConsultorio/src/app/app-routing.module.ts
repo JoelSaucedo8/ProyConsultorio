@@ -10,8 +10,8 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-   { path: 'footer', component: FooterComponent },
-   { path: 'header', component: HeaderComponent },
+  { path: 'footer', component: FooterComponent },
+  { path: 'header', component: HeaderComponent },
   // { path: '**', redirectTo: '', pathMatch: 'full' } // Redireccionar cualquier ruta desconocida a Home
 ];
 

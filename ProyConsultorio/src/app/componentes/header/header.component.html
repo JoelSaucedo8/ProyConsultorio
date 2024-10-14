@@ -1,7 +1,6 @@
 <header>
   <div class="logo-title">
-    <img src="assets/imagenes/logoClinic.PNG" alt="Logo Clínica" class="logo" />
-    <h1>Clínica Virtual</h1>
+    <img src="assets/imagenes/logoClinic.PNG" alt="Logo Clínica" class="logo" (click)="home()" />
   </div>
   <div *ngIf="isLoggedIn">
     <span>{{ userName }}</span>

@@ -1,43 +1,39 @@
 <div class="home-container">
   <div class="welcome-section">
-    <h2>Bienvenido a</h2>
-    <h1>Clínica Virtual</h1>
+    <h2 class="lilita-one-regular">Bienvenido a</h2>
+    <h1 class="lilita-one-regular">Clínica Virtual</h1>
   </div>
 
   <div class="professionals-section">
-    <h3>Nuestros Profesionales</h3>
+    <h3 class="lilita-one-regular">Nuestros Profesionales</h3>
 
     <div class="professional-card">
-      <img
-        src="assets/imagenes/doctor1.jpeg"
-        alt="Dr. Juan Pérez"
-        class="professional-image"
-      />
-    
+      <img [src]="professionals[currentProfessionalIndex].image" 
+           [alt]="professionals[currentProfessionalIndex].name" 
+           class="professional-image">
       <div class="professional-info">
         <p>
-          <strong>Mi nombre es Dr. Juan Pérez, tengo 45 años y soy cardiólogo.</strong>
+          <strong>
+            Mi nombre es {{ professionals[currentProfessionalIndex].name }}, 
+            tengo {{ professionals[currentProfessionalIndex].age }} años 
+            y soy {{ professionals[currentProfessionalIndex].specialty }}.
+          </strong>
         </p>
         <p>
-          Lo que más me gusta de mi profesión es poder ayudar a mis pacientes a mejorar su calidad de vida. Cada día,
-          tengo la oportunidad de hacer la diferencia real en la salud de las personas, y eso me motiva a seguir
-          aprendiendo y creciendo en mi especialidad. Me apasiona la cardiología porque me permite combinar mi amor por
-          la ciencia con el deseo de brindar cuidado y apoyo a quienes más lo necesitan.
+          {{ professionals[currentProfessionalIndex].description }}
         </p>
       </div>
     </div>
 
     <div class="pagination">
-      <button class="prev">&lt; Previous</button>
-      <button class="page-number">1</button>
-      <button class="page-number">2</button>
-      <button class="page-number">3</button>
-      <button class="next">Next &gt;</button>
+      <button class="prev" (click)="previousProfessional()">&lt; Previous</button>
+      <button class="page-number">{{ currentProfessionalIndex + 1 }}</button>
+      <button class="next" (click)="nextProfessional()">Next &gt;</button>
     </div>
-  </div>
 
-  <div class="auth-buttons">
-    <button class="login">Iniciar sesión</button>
-    <button class="register">Registrarse</button>
+    <div class="auth-buttons">
+      <button class="login">Iniciar sesión</button>
+      <button class="register" routerLink="/register">Registrarse</button>
+    </div>
   </div>
 </div>

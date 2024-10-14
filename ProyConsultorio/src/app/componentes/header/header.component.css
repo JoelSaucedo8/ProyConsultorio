@@ -17,6 +17,7 @@ header {
     width: 120px;                        /* Ajusta el tamaño del logo */
     height: auto;                       /* Mantiene la proporción de la imagen */
     margin-right: 15px;                 /* Espaciado entre el logo y el título */
+    cursor:pointer;
   }
   
   h1 {

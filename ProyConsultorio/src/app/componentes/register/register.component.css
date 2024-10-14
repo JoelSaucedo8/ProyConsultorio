@@ -1,0 +1,84 @@
+body {
+    background-color: #52b176; /* Verde para todo el fondo */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh; /* Asegura que el body ocupe toda la altura de la ventana */
+    overflow: hidden; /* Evita el desbordamiento */
+}
+
+.register-modal {
+    background-color: rgba(82, 177, 118, 0.8); /* Fondo verde detrás del formulario */
+    position: fixed; /* Ocupa toda la pantalla */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    z-index: 1000; /* Para que esté encima de otros elementos */
+}
+
+.register-container {
+    background-color: #e0f7fa; /* Fondo azul claro */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 50px; /* Espaciado interno */
+    max-width: 400px; /* Ancho máximo del formulario */
+    margin: 20px auto; /* Centrado horizontal */
+    font-family: Arial, sans-serif; /* Fuente de texto */
+}
+
+h2 {
+    color: #343434; /* Color del encabezado */
+    margin-bottom: 20px; /* Espacio debajo del encabezado */
+    text-align: center; /* Centrar el texto */
+}
+
+label {
+    display: block; /* Hacer que la etiqueta ocupe toda la línea */
+    margin-bottom: 5px; /* Espacio entre la etiqueta y el campo */
+    color: #343434; /* Color del texto de la etiqueta */
+    font-weight: bold; /* Hacer que el texto sea más destacado */
+}
+
+input {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 15px; /* Espacio entre los campos */
+    border: 1px solid #ccc; /* Bordes del campo */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente del texto del campo */
+}
+
+input:focus {
+    border-color: #52b176; /* Color del borde al hacer foco */
+    outline: none; /* Quitar el contorno por defecto */
+}
+
+.button-container {
+    display: flex; /* Usar flexbox para alinear los botones */
+    justify-content: space-between; /* Espacio entre los botones */
+}
+
+button {
+    background-color: #6a9f7a; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+    font-size: 16px; /* Tamaño de fuente del texto del botón */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+}
+
+button:hover {
+    background-color: #4a7c59; /* Color de fondo del botón al pasar el mouse */
+}
+
+button[type="button"] {
+    background-color: #ccc; /* Color del botón de cancelar */
+}
+
+button[type="button"]:hover {
+    background-color: #bbb; /* Color del botón de cancelar al pasar el mouse */
+}
