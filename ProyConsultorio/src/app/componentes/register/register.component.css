@@ -20,11 +20,11 @@ body {
 }
 
 .register-container {
-    background-color: #e0f7fa; /* Fondo azul claro */
+    background-color: #e0f7fa; 
     border-radius: 10px; /* Bordes redondeados */
     padding: 50px; /* Espaciado interno */
     max-width: 400px; /* Ancho máximo del formulario */
-    margin: 20px auto; /* Centrado horizontal */
+    margin: 30px auto; /* Centrado horizontal */
     font-family: Arial, sans-serif; /* Fuente de texto */
 }
 

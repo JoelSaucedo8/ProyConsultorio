@@ -1,0 +1,101 @@
+/* General styles for the form */
+body {
+    background-color: #65aa69;
+    margin: 0; /* Elimina márgenes por defecto */
+    padding: 0; /* Elimina padding por defecto */
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%; /* Asegura que el body y html ocupen toda la altura */
+}
+
+* {
+    box-sizing: border-box; /* Asegura que el padding no cause desbordamiento */
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea el formulario en la parte superior */
+    min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+    padding-top: 0; /* Elimina padding superior extra */
+    background-color: #4db47c;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: 50px 0; /* Ajusta para tener espacio alrededor, sin afectar el padding general */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+/* Label styles */
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-family: Arial, sans-serif;
+}
+
+/* Input field styles */
+input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Button styles */
+button {
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+button[type="button"] {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+button[type="button"]:hover {
+    background-color: #d32f2f;
+}
+
+/* Add some responsiveness */
+@media (max-width: 500px) {
+    form {
+        padding: 15px;
+        width: 90%;
+    }
+    
+    input {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}

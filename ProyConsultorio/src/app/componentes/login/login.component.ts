@@ -1,36 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service'; // Ajusta la ruta según tu estructura
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm: FormGroup;
-cancel: any;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void {}
-
   onSubmit(): void {
-    const { username, password } = this.loginForm.value;
-    this.authService.login(username, password).subscribe((success: boolean) => {
-      if (success) {
-        //se redirige a la pag principal
-        console.log('Login exitoso');
-        //se puede usar el router para redirigir
-      } else {
-        //muestra mensaje de error
-        console.error('Login fallido');
-      }
-    });
+    const username = this.loginForm.get('username')?.value;
+    const password = this.loginForm.get('password')?.value;
+
+    //validacion de usuario
+    if (username === 'usuarioValido' && password === '1234') {
+      alert('Usuario válido'); //pop-up
+      this.router.navigate(['/next-page']); //usuario correcto, da acceso a la pag
+    } else {
+      alert('Usuario o contraseña inválidos'); //pop-up de error
+    }
+  }
+
+  cancel(): void {
+    this.loginForm.reset(); //reinicio de formulario si se cancela
   }
 }
