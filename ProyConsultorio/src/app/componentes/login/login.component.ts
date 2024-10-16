@@ -10,6 +10,13 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginForm: FormGroup;
 
+  // Simulación de un usuario válido
+  validUser = {
+    username: 'usuarioValido',
+    password: '123456'
+  };
+
+
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -18,19 +25,23 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    const username = this.loginForm.get('username')?.value;
-    const password = this.loginForm.get('password')?.value;
+    const { username, password } = this.loginForm.value;
 
-    //validacion de usuario
-    if (username === 'usuarioValido' && password === '1234') {
-      alert('Usuario válido'); //pop-up
-      this.router.navigate(['/next-page']); //usuario correcto, da acceso a la pag
+    if (username === this.validUser.username && password === this.validUser.password) {
+      // Si el usuario es válido, mostrar pop-up de éxito y redirigir a la siguiente página
+      alert('Usuario válido. ¡Bienvenido!');
+      this.router.navigate(['/next-page']); // Cambia '/next-page' por la ruta deseada
     } else {
-      alert('Usuario o contraseña inválidos'); //pop-up de error
+      // Si las credenciales no son correctas, mostrar un mensaje de error
+      alert('Usuario o contraseña incorrectos.');
     }
   }
 
   cancel(): void {
-    this.loginForm.reset(); //reinicio de formulario si se cancela
+    this.loginForm.reset(); // Restablece el formulario
+  }
+
+  home() :void {
+    this.router.navigate(['/']);
   }
 }

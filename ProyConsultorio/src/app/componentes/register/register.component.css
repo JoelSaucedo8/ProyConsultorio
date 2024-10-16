@@ -1,9 +1,7 @@
 body {
     background-color: #52b176; /* Verde para todo el fondo */
     margin: 0;
-    font-family: Arial, sans-serif;
     height: 100vh; /* Asegura que el body ocupe toda la altura de la ventana */
-    overflow: hidden; /* Evita el desbordamiento */
 }
 
 .register-modal {
@@ -21,16 +19,18 @@ body {
 
 .register-container {
     background-color: #e0f7fa; 
-    border-radius: 10px; /* Bordes redondeados */
-    padding: 50px; /* Espaciado interno */
-    max-width: 400px; /* Ancho máximo del formulario */
-    margin: 30px auto; /* Centrado horizontal */
-    font-family: Arial, sans-serif; /* Fuente de texto */
+    border-radius: 10px 10px 20px 20px; /* Redondear la parte inferior */
+    padding: 20px; /* Espacio interno reducido para el contenedor */
+    max-width: 90%; /* Asegura que el contenedor ocupe el 90% del ancho de la pantalla */
+    width: 350px; /* Ancho fijo */
+    height: auto; /* Permitir que el contenedor se ajuste automáticamente a la altura del contenido */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Añade una sombra suave */
+    position: relative; /* Para posicionar elementos dentro de este contenedor */
 }
 
-h2 {
+h3 { 
     color: #343434; /* Color del encabezado */
-    margin-bottom: 20px; /* Espacio debajo del encabezado */
+    margin-bottom: 15px; /* Espacio debajo del encabezado */
     text-align: center; /* Centrar el texto */
 }
 
@@ -43,11 +43,11 @@ label {
 
 input {
     width: 100%; /* Ocupa todo el ancho del contenedor */
-    padding: 10px; /* Espaciado interno */
-    margin-bottom: 15px; /* Espacio entre los campos */
+    padding: 5px; /* Espacio interno reducido */
+    margin-bottom: 10px; /* Espacio entre campos reducido */
     border: 1px solid #ccc; /* Bordes del campo */
     border-radius: 5px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de fuente del texto del campo */
+    font-size: 12px; /* Tamaño de fuente */
 }
 
 input:focus {
@@ -58,27 +58,52 @@ input:focus {
 .button-container {
     display: flex; /* Usar flexbox para alinear los botones */
     justify-content: space-between; /* Espacio entre los botones */
+    margin-top: 10px; /* Espacio encima de los botones */
 }
 
 button {
-    background-color: #6a9f7a; /* Color de fondo del botón */
+    background-color: #38804e; /* Color de fondo del botón Aceptar */
     color: white; /* Color del texto del botón */
     border: none; /* Sin bordes */
     border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 15px; /* Espaciado interno */
+    padding: 8px 50px; /* Espaciado interno reducido */
     cursor: pointer; /* Cambiar el cursor al pasar el mouse */
-    font-size: 16px; /* Tamaño de fuente del texto del botón */
+    font-size: 14px; /* Tamaño de fuente */
     transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    margin-left: 5px; /* Espacio entre los botones */
+    flex-grow: 1; /* Permite que los botones crezcan en el espacio disponible */
 }
 
 button:hover {
-    background-color: #4a7c59; /* Color de fondo del botón al pasar el mouse */
+    background-color: #115a27; /* Color de fondo del botón al pasar el mouse */
 }
 
 button[type="button"] {
-    background-color: #ccc; /* Color del botón de cancelar */
+    background-color: #c21616; /* Botón Cancelar */
 }
 
 button[type="button"]:hover {
-    background-color: #bbb; /* Color del botón de cancelar al pasar el mouse */
+    background-color: #5a0f0f; /* Botón Cancelar al pasar el mouse */
 }
+
+button:first-child {
+    margin-left: 0; /* Quitar margen en el primer botón */
+}
+
+.logo {
+    width: 100px; /* Tamaño del logo */
+    height: auto; /* Mantener proporción */
+    position: absolute; /* Posiciona el logo respecto al contenedor */
+    top: 20px; /* Espacio desde la parte superior */
+    left: 20px; /* Espacio desde la izquierda */
+    cursor: pointer;
+}
+
+.lilita-one-regular {
+    font-family: "Lilita One", sans-serif;
+  }
+
+.lexend-uniquifier {
+    font-family: "Lexend", sans-serif;
+    color: #111010;
+  }

@@ -1,34 +1,43 @@
-<!-- register.component.html -->
- <body>
-  
-<div class="register-container">
-  <h2>Crear usuario</h2>
-  <form (ngSubmit)="submitRegister()">
-    <label>Nombre</label>
-    <input type="text" name="nombre" [(ngModel)]="nombre" required />
-    
-    <label>Apellido</label>
-    <input type="text" name="apellido" [(ngModel)]="apellido" required />
-    
-    <label>Número de documento</label>
-    <input type="text" name="documento" [(ngModel)]="documento" required />
-    
-    <label>Correo</label>
-    <input type="email" name="correo" [(ngModel)]="correo" required />
-    
-    <label>Teléfono</label>
-    <input type="tel" name="telefono" [(ngModel)]="telefono" required />
-    
-    <label>Contraseña</label>
-    <input type="password" name="password" [(ngModel)]="password" required />
-    
-    <label>Repetir contraseña</label>
-    <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" required />
-    
-    <div class="button-container">
-      <button type="button" (click)="closeRegister()">Cancelar</button>
-      <button type="submit">Crear</button>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
+
+<body>
+  <div class="register-modal">
+    <img src="assets/imagenes/logoClinic.PNG" class="logo" alt="Logo" (click)="home()"/>
+    <div class="register-container">
+      <h3 class="lexend-uniquifier">Crear usuario</h3>
+      <form (ngSubmit)="submitRegister()">
+        <label class="">Nombre</label>
+        <input type="text" name="nombre" [(ngModel)]="nombre" required />
+        
+        <label>Apellido</label>
+        <input type="text" name="apellido" [(ngModel)]="apellido" required />
+        
+        <label>Número de documento</label>
+        <input type="text" name="documento" [(ngModel)]="documento" required />
+        
+        <label>Correo</label>
+        <input type="email" name="correo" [(ngModel)]="correo" required />
+        
+        <label>Teléfono</label>
+        <input type="tel" name="telefono" [(ngModel)]="telefono" required />
+        
+        <label>Contraseña</label>
+        <input type="password" name="password" [(ngModel)]="password" required />
+        
+        <label>Repetir contraseña</label>
+        <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" required />
+        
+        <div class="button-container">
+          <button type="button" (click)="closeRegister()">Cancelar</button>
+          <button type="submit">Aceptar</button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
+  </div>
 </body>

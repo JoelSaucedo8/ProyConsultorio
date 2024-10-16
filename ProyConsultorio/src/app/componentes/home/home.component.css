@@ -1,125 +1,135 @@
-.lilita-one-regular {
-  font-family: "Lilita One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #52b176;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Mantiene el contenido alineado al inicio */
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  background-color: transparent; /* Mantener el fondo existente */
+  height: 150px; /* Ajustar el tamaño según lo que necesites */
+  position: relative;
+  margin-top: 50px; /* Espacio adicional para bajar el header */
+}
+
+.logo-title {
+  display: flex;
+  flex-direction: column; /* Colocar el texto "Bienvenido a" sobre el logo */
+  align-items: flex-start; /* Alinear todo a la izquierda */
+  font-size: 25px; /* texto "Bienvenido a" */
+  margin: 0; /* Eliminar márgenes predeterminados */
+  padding-top: 350px; /* Espacio superior para "Bienvenido a" */
+  margin-left: 50px; /* Espacio a la izquierda */
+}
+
+.logo {
+  width: 300px; /* Tamaño del logo */
+  height: auto; /* Mantener proporción */
+  margin-top: 10px; /* Espacio entre el logo y el texto "Bienvenido a" */
+  cursor: pointer;
+  margin-left: 50px; /* Espacio a la izquierda */
 }
 
 .home-container {
+  position: relative;
+  width: 80%;
+  max-width: 1200px;
+  text-align: center;
+  margin-top: 100px; /* Agregamos un margen para evitar superposición con los botones */
+}
+
+.auth-buttons {
+  position: fixed; /* Fijo en la parte superior derecha de la ventana */
+  top: 20px; /* Distancia desde la parte superior de la ventana */
+  right: 20px; /* Distancia desde la parte derecha de la ventana */
+  display: flex; /* Los botones se alinean horizontalmente */
+  gap: 10px; /* Espacio entre los botones */
+  z-index: 1000; /* Asegura que los botones estén por encima del contenido */
+}
+
+.auth-buttons button {
+  background-color: #6a9f7a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.auth-buttons button:hover {
+  background-color: #4a7c59;
+}
+
+.lilita-one-regular {
+  font-family: "Lilita One", sans-serif;
+}
+
+.lexend-uniquifier {
+  font-family: "Lexend", sans-serif;
+  color: #111010;
+}
+
+.professionals-section {
+  padding: 30px;
+  border-radius: 20px;
+}
+
+h3 {
+  color: #343434;
+  margin-bottom: 20px;
+}
+
+.professional-card {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #52b176;
-  min-height: 100vh;
+  width: 600px;
+  margin: 0 auto 20px;
+}
+
+.professional-image {
+  width: 300px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.professional-info {
   padding: 20px;
-  font-family: Arial, sans-serif;
+  text-align: left;
+  color: #343434;
+}
 
-  .welcome-section {
-    text-align: left;
-    margin-bottom: 20px;
-    background-color: #52b176;
-    h1 {
-      font-size: 36px;
-      color: #343434;
-    }
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 
-    h2 {
-      font-size: 24px;
-      color: #343434;
-    }
-  }
+.prev,
+.next,
+.page-number {
+  background-color: #4a7c59;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+}
 
-  .professionals-section {
-    text-align: center;
-    background-color: #52b176;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 800px;
-
-    h3 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #343434;
-    }
-
-    .professional-card {
-      display: flex;
-      background-color: #b7e3b0;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      margin-bottom: 20px;
-
-      .professional-image {
-        width: 150px;
-        height: auto;
-        margin-right: 20px;
-      }
-
-      .professional-info {
-        padding: 20px; /* Ajustar padding para hacer el cuadro más uniforme */
-        text-align: left;
-        color: #343434;
-
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añadir sombra para que se vea más definido */
-        width: 100%; /* Asegura que ocupe todo el espacio disponible */
-        margin-right: 20px; /* Añadir espacio en los lados */
-
-        p {
-          margin: 10px 0;
-        }
-
-        strong {
-          font-size: 18px;
-        }
-      }
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-      .prev,
-      .next,
-      .page-number {
-        background-color: #4a7c59;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 12px;
-        margin: 0 5px;
-        cursor: pointer;
-      }
-
-      .prev:hover,
-      .next:hover,
-      .page-number:hover {
-        background-color: #3d654a;
-      }
-    }
-  }
-
-  .auth-buttons {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px; /* Espacio entre los botones */
-
-    button {
-      background-color: #6a9f7a;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    .login:hover {
-      background-color: #4a7c59;
-    }
-
-    .register:hover {
-      background-color: #3d654a;
-    }
-  }
+.prev:hover,
+.next:hover,
+.page-number:hover {
+  background-color: #3d654a;
 }

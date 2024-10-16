@@ -9,13 +9,13 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent {
   isLoggedIn$: Observable<boolean>;
-  currentProfessionalIndex: number = 0; // Índice del profesional actual
+  currentProfessionalIndex: number = 0; // indice del profesional actual
 
   professionals = [
     {
       name: 'Dr. Juan Pérez',
-      age: 45,
-      specialty: 'cardiólogo',
+      // age: 45,
+      specialty: '- Cardiólogo',
       description: `Lo que más me gusta de mi profesión es poder ayudar a mis pacientes a mejorar su calidad de vida. Cada día,
       tengo la oportunidad de hacer la diferencia real en la salud de las personas, y eso me motiva a seguir
       aprendiendo y creciendo en mi especialidad. Me apasiona la cardiología porque me permite combinar mi amor por
@@ -24,8 +24,8 @@ export class HomeComponent {
     },
     {
       name: 'Dra. Ana López',
-      age: 38,
-      specialty: 'pediatra',
+      // age: 38,
+      specialty: '- Pediatra',
       description: `Lo que más me gusta de mi profesión es poder acompañar a los niños y sus familias en su crecimiento y desarrollo.
       Cada día, me esfuerzo por crear un ambiente seguro y cariñoso para mis pequeños pacientes, y eso me llena de alegría.
       La pediatría me permite combinar mi amor por la medicina con mi deseo de hacer una diferencia positiva en la vida de los niños.
@@ -34,28 +34,29 @@ export class HomeComponent {
     },
     {
       name: 'Dra. María González',
-      age: 40,
-      specialty: 'dermatóloga',
+      // age: 40,
+      specialty: '- Dermatóloga',
       description: `Mi pasión por la dermatología me permite ayudar a mis pacientes a cuidar su piel y autoestima.`,
       image: 'assets/imagenes/doctor3.jpg',
     }
   ];
+home: any;
 
   constructor(private authService: AuthService) {
     this.isLoggedIn$ = this.authService.isLoggedIn$; 
   }
 
   openLoginPopup(): void {
-    // Implementar lógica para abrir un pop-up de inicio de sesión
+    // logica para abrir un pop-up de inicio de sesión
   }
 
   nextProfessional(): void {
-    // Cambiar al siguiente profesional
+    // cambiar al siguiente profesional
     this.currentProfessionalIndex = (this.currentProfessionalIndex + 1) % this.professionals.length; // Vuelve al inicio al llegar al final
   }
 
   previousProfessional(): void {
-    // Cambiar al profesional anterior
+    // cambiar al profesional anterior
     this.currentProfessionalIndex = (this.currentProfessionalIndex - 1 + this.professionals.length) % this.professionals.length; // Vuelve al final si está en el inicio
   }  
 }

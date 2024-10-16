@@ -1,56 +1,38 @@
-header {
-    display: flex;                     /* Flexbox para alinear los elementos */
-    justify-content: space-between;     /* Espacio entre el logo-título y la sección de usuario */
-    align-items: center;                /* Alinea verticalmente los elementos */
-    padding: 20px;                      /* Espaciado alrededor del header */
-    background-color: #52b176;          /* Color de fondo */
-    color: black;                       /* Color del texto */
-    font-family: Arial, sans-serif;      /* Tipo de fuente */
-  }
-  
-  .logo-title {
-    display: flex;                      /* Flexbox para alinear la imagen y el título */
-    align-items: center;                /* Centra verticalmente la imagen y el título */
-  }
-  
-  .logo {
-    width: 120px;                        /* Ajusta el tamaño del logo */
-    height: auto;                       /* Mantiene la proporción de la imagen */
-    margin-right: 15px;                 /* Espaciado entre el logo y el título */
-    cursor:pointer;
-  }
-  
-  h1 {
-    font-size: 24px;                    /* Tamaño de la fuente del título */
-    margin: 0;                          /* Elimina márgenes por defecto */
-  }
-  
-  header div {
-    display: flex;                      /* Flexbox para alinear el contenido del usuario */
-    align-items: center;                /* Centra verticalmente el contenido del usuario */
-  }
-  
-  header span {
-    margin-right: 15px;                 /* Espaciado a la derecha del nombre de usuario */
-    font-size: 16px;                    /* Tamaño de la fuente para el nombre de usuario */
-  }
-  
-  button {
-    padding: 10px 15px;                 /* Espaciado dentro del botón */
-    background-color: #f1f1f1;          /* Color de fondo del botón */
-    border: none;                        /* Sin borde */
-    border-radius: 5px;                 /* Bordes redondeados */
-    cursor: pointer;                     /* Cambia el cursor al pasar sobre el botón */
-    font-size: 16px;                     /* Tamaño de la fuente del botón */
-  }
-  
-  button:hover {
-    background-color: #e1e1e1;          /* Cambia el color del botón al pasar el mouse */
-  }
-  
-  .info-icon {
-    font-size: 20px;                    /* Tamaño del ícono de información */
-    margin-left: 10px;                  /* Espaciado a la izquierda del ícono */
-    cursor: pointer;                    /* Cambia el cursor al pasar sobre el ícono */
-  }
-  
+/* header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  height: 150px; 
+}
+
+.logo-title {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; 
+}
+
+.logo-title p {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 20px; 
+  margin: 0;
+  padding-bottom: 10px; 
+}
+
+.logo {
+  width: 150px; 
+  height: auto;
+  cursor: pointer;
+}
+
+.info-icon {
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+header div *ngIf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+} */

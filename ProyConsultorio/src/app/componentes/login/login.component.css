@@ -1,6 +1,6 @@
 /* General styles for the form */
 body {
-    background-color: #65aa69;
+    background-color: #57945a;
     margin: 0; /* Elimina márgenes por defecto */
     padding: 0; /* Elimina padding por defecto */
     box-sizing: border-box;
@@ -16,20 +16,30 @@ html, body {
 
 .login-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Alinea el contenido a la izquierda */
     align-items: flex-start; /* Alinea el formulario en la parte superior */
     min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
     padding-top: 0; /* Elimina padding superior extra */
     background-color: #4db47c;
 }
 
+.logo {
+    width: 100px; /* Tamaño del logo */
+    height: auto; /* Mantener proporción */
+    margin: 20px; /* Espacio alrededor del logo */
+    cursor: pointer;
+}
+
+/* Form styles */
 form {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 400px;
-    margin: 50px 0; /* Ajusta para tener espacio alrededor, sin afectar el padding general */
-    padding: 20px;
+    align-content: center;
+    margin: 150px; 
+    padding: 40px;
+    margin-left: 350px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
@@ -99,3 +109,12 @@ button[type="button"]:hover {
         font-size: 14px;
     }
 }
+
+.lilita-one-regular {
+    font-family: "Lilita One", sans-serif;
+  }
+
+.lexend-uniquifier {
+    font-family: "Lexend", sans-serif;
+    color: #111010;
+  }

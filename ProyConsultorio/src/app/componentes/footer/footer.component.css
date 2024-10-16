@@ -1,23 +1,35 @@
 .footer {
-    background-color: #52b176; /* Color de fondo verde oscuro */
-    color: black; 
-    padding: 20px;
-    text-align: center;
-    font-size: 14px;
-  
-    .social-links {
-      margin-top: 10px;
-  
-      a {
-        color: black;
-        margin: 0 5px;
-        text-decoration: none;
-        font-size: 16px;
-      }
-  
-      a:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-  
+  display: flex; /* Usa flexbox para el footer */
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan si no caben en una línea */
+  justify-content: space-between; /* Espacio entre los elementos */
+  align-items: center; /* Centra verticalmente los elementos */
+  padding: 10px; /* Espaciado interno */
+  background-color: #3ead5a; /* Color de fondo del footer */
+  font-size: 10px;
+}
+
+.footer p {
+  margin: 0 15px; /* Espacio horizontal entre los párrafos */
+}
+
+.social-links {
+  display: flex; /* Usa flexbox para alinear los enlaces sociales */
+}
+
+.social-links a {
+  display: flex; /* Hace que el enlace sea un contenedor flex */
+  align-items: center; /* Centra verticalmente el texto y el icono */
+  margin-left: 10px; /* Espacio entre los enlaces */
+  text-decoration: none; /* Quitar subrayado */
+  color: #212723; /* Color del texto de los enlaces */
+}
+
+.social-icon {
+  width: 24px; /* Ajusta el tamaño del icono (ancho) */
+  height: 24px; /* Ajusta el tamaño del icono (alto) */
+  margin-right: 5px; /* Espacio entre el icono y el texto */
+}
+
+.social-links a:hover {
+  text-decoration: underline; /* Subrayar el enlace al pasar el mouse */
+}
