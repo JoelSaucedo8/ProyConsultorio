@@ -1,13 +1,13 @@
 <div class="login">
-  <h1 mat-dialog-title id="login-title">Login</h1>
+  <h1 mat-dialog-title id="login-title">Iniciar Sesión</h1>
   <div mat-dialog-content class="login-box">
     <p id="title-usuario">Usuario</p>
-    <input class="custom-input" type="text" placeholder="Ingrese Usuario" [(ngModel)]="username">
+    <input id="dni" class="custom-input" type="text" placeholder="Ingrese Usuario" [(ngModel)]="dni">
     <p id="title-contrasenia">Contraseña</p>
-    <input class="custom-input" type="password" placeholder="Ingrese Contraseña" [(ngModel)]="password">
+    <input id="password" class="custom-input" type="password" placeholder="Ingrese Contraseña" [(ngModel)]="password">
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="close()" id="cancelar">Cancelar</button>
-    <button mat-button (click)="iniciar()" id="aceptar">Aceptar</button>
+    <button mat-button id="aceptar" (click)="login()">Aceptar</button>
   </div>
 </div>

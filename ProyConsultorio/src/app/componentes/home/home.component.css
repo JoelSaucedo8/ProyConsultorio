@@ -1,3 +1,20 @@
 body {
-    background-color: #67d46c;
+    margin: 0;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    display: flex; /* Utiliza Flexbox para el diseño */
+    flex-direction: column; /* Coloca los elementos en una columna */
+    background-color: #67d46c; /* Color de fondo */
+}
+
+main {
+    flex: 1; /* Toma todo el espacio restante */
+}
+
+footer {
+    background-color: #6EB473; /* Color de fondo del footer */
+    padding: 20px;
+    text-align: center;
+    color: white;
+    bottom: 0; /* Posiciona en la parte inferior */
+    width: 100%; /* Ocupa todo el ancho */
 }

@@ -1,5 +1,7 @@
 <mat-toolbar class="header">
+<div *ngIf= "userRole === 'guest'">
     <span>Bienvenido a la clínica virtual</span>
+</div>
     <span class="example-spacer"></span>
 <div *ngIf = "userRole === 'guest'">
     <button mat-button (click)="openPopup()">Iniciar Sesión</button>

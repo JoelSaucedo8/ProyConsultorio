@@ -1,46 +1,56 @@
 .register-container {
-    max-width: 400px;
-    max-height: 500px;
-    margin: 0 auto;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #73cf78;
-  }
-  
-  .register-container h2 {
-    text-align: center;
-  }
-  
-  .register-container form div {
-    margin-bottom: 0.3rem;
-  }
-  
-  .register-container label {
-    display: block;
-    margin-bottom: 0.3rem;
-  }
-  
-  .register-container input {
-    width: 80%;
-    padding: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  .register-container button {
-    width: 50%;
-    padding: 0.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .register-container button:disabled {
-    background-color: #3C7D31;
-  }
-  
-  div.ng-invalid.ng-touched {
-    color: red;
-  }
+  padding: 20px; /* Relleno para el contenedor */
+  background-color: #73cf78; /* Color de fondo */
+  display: flex; /* Usar Flexbox para centrar el contenido */
+  flex-direction: column; /* Organiza los elementos en columna */
+  justify-content: center; /* Centra verticalmente el contenido */
+  align-items: center; /* Centra horizontalmente el contenido */
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 1rem; /* Espacio debajo del título */
+}
+
+.register-container form {
+  width: 100%; /* Asegúrate de que el formulario ocupe todo el ancho */
+  max-width: 500px; /* Limita el ancho máximo del formulario */
+}
+
+.register-container form div {
+  margin-bottom: 0.3rem;
+}
+
+.register-container label {
+  display: block;
+  margin-bottom: 0.3rem; /* Espacio debajo de la etiqueta */
+}
+
+.register-container input {
+  width: 100%; /* El campo de entrada ocupa el 100% del contenedor */
+  padding: 0.3rem;
+  font-size: 1rem;
+}
+
+.register-container button {
+  width: 100%; /* Botón ocupa el 100% del ancho del formulario */
+  padding: 0.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem; /* Espacio en la parte superior del botón */
+}
+
+.register-container button:disabled {
+  background-color: #A9A9A9; /* Cambiar a un color más claro */
+  cursor: not-allowed; /* Muestra el cursor como no permitido */
+}
+
+
+div.ng-invalid.ng-touched {
+  color: red;
+}
+
   

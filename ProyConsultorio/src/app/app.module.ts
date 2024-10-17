@@ -14,6 +14,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FooterComponent } from './componentes/footer/footer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './componentes/home/home.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HomeUsuarioComponent } from './componentes/home-usuario/home-usuario.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { HomeComponent } from './componentes/home/home.component';
     RegisterComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    HomeUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import { HomeComponent } from './componentes/home/home.component';
     MatToolbarModule,
     MatDialogModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

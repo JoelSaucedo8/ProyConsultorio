@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -10,29 +11,78 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    // Inicializamos el formulario con validaciones
+  constructor(private fb: FormBuilder, 
+              private dataService: DataService, 
+              private router: Router) {
+    
+    // Crear el formulario con validaciones
     this.registerForm = this.fb.group({
-      name: ['', Validators.required],
+      dni: ['', Validators.required],
+      nombre: ['', Validators.required],
       apellido: ['', Validators.required],
-      username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      fecha_nacimiento: ['', Validators.required],
+      telefono: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
+    }, {
+      validator: this.passwordMatchValidator // Validación personalizada para comparar contraseñas
     });
   }
 
+  // Validador personalizado para confirmar que las contraseñas coincidan
+  passwordMatchValidator(form: FormGroup): any {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  // Método para redirigir
   goToRedirige() {
     this.router.navigate(['home']);
   }
 
   // Método para enviar el formulario
-  onSubmit() {
+  onSubmit(): void {
+    this.registerForm.markAllAsTouched();
+    console.log(this.registerForm);
     if (this.registerForm.valid) {
-      // Aquí podrías procesar el formulario (enviar a un servidor, etc.)
-      console.log('Formulario válido, datos:', this.registerForm.value);
+      console.log('Formulario válido', this.registerForm.value);
+      const newUser = {
+        dni: this.registerForm.value.dni,
+        apellido: this.registerForm.value.apellido,
+        nombre: this.registerForm.value.nombre,
+        fecha_nacimiento: this.registerForm.value.fecha_nacimiento,
+        password: this.registerForm.value.password,
+        rol: 'paciente',
+        email: this.registerForm.value.email,
+        telefono: this.registerForm.value.telefono
+      }; 
+  
+      this.dataService.registerUser(newUser).subscribe({
+        next: (response) => {
+          console.log(response.mensaje); // Mensaje de éxito
+          alert('Registro exitoso');
+          
+          // Almacenar el token si lo devuelve la API
+          if (response.token) {
+            localStorage.setItem('token', response.token);
+          }
+
+          this.router.navigate(['home']); // Redirigir tras registro exitoso
+        },
+        error: (error) => {
+          console.error('Error al crear el usuario', error); // Manejar errores
+          alert('Error al crear el usuario: ' + error.error.mensaje || 'Error desconocido');
+        },
+        complete: () => {
+          console.log('Registro completado');
+        }
+      });
+      
     } else {
-      console.log('Formulario inválido');
+      console.log('Formulario inválido', this.registerForm);
+      this.registerForm.markAllAsTouched();
     }
   }
 }
