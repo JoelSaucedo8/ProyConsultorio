@@ -7,10 +7,10 @@
 
 <body>
   <div class="auth-buttons">
-    <button class="login" routerLink="/login">Iniciar sesión</button>
+    <button class="login" (click)="openLoginDialog()">Iniciar sesión</button>
     <button class="register" routerLink="/register">Registrarse</button>
   </div>
-
+  
   <header class="header lexend-uniquifier">
     <div>
       <p class="logo-title">Bienvenido a</p>
@@ -21,10 +21,8 @@
   <div class="home-container lexend-uniquifier">
     <div class="professionals-section">
       <h3 >Nuestros Profesionales</h3>
-
       <div class="professional-card">
         <img [src]="professionals[currentProfessionalIndex].image" class="professional-image" alt="Imagen del profesional">
-
         <div class="professional-info">
           <p>
             <strong>

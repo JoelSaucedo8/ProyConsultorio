@@ -1,47 +1,41 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  loginForm: FormGroup;
+  username: string = '';
+  password: string = '';
 
-  // Simulación de un usuario válido
-  validUser = {
-    username: 'usuarioValido',
-    password: '123456'
-  };
+  constructor(
+    public dialogRef: MatDialogRef<LoginComponent>,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+  iniciar(): void {
+    this.authService.login(this.username, this.password).subscribe(success => {
+      if (success) {
+        this.dialogRef.close(); // Cierra el diálogo
+        const role = this.authService.getRole(); // Obtiene el rol del usuario logueado
+        if (role) {
+          this.router.navigate([`/${role}`]); // Redirige según el rol
+        } else {
+          console.error('Rol no encontrado');
+        }
+      } else {
+        // Aquí puedes manejar el error si el login falla
+        console.error('Login failed');
+      }
     });
   }
 
-  onSubmit(): void {
-    const { username, password } = this.loginForm.value;
-
-    if (username === this.validUser.username && password === this.validUser.password) {
-      // Si el usuario es válido, mostrar pop-up de éxito y redirigir a la siguiente página
-      alert('Usuario válido. ¡Bienvenido!');
-      this.router.navigate(['/next-page']); // Cambia '/next-page' por la ruta deseada
-    } else {
-      // Si las credenciales no son correctas, mostrar un mensaje de error
-      alert('Usuario o contraseña incorrectos.');
-    }
-  }
-
-  cancel(): void {
-    this.loginForm.reset(); // Restablece el formulario
-  }
-
-  home() :void {
-    this.router.navigate(['/']);
+  close(): void {
+    this.dialogRef.close();
   }
 }
