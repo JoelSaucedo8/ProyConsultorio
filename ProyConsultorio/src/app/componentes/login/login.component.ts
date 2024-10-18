@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  username: string = 'user';
+  password: string = '12345';
 
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
@@ -19,23 +19,12 @@ export class LoginComponent {
   ) {}
 
   iniciar(): void {
-    this.authService.login(this.username, this.password).subscribe(success => {
-      if (success) {
-        this.dialogRef.close(); // Cierra el diálogo
-        const role = this.authService.getRole(); // Obtiene el rol del usuario logueado
-        if (role) {
-          this.router.navigate([`/${role}`]); // Redirige según el rol
-        } else {
-          console.error('Rol no encontrado');
+    console.log('Intentando iniciar sesión...');
+            this.router.navigate(['/home-usuario']); //se dirige al componente home-usuario
+            this.close() 
         }
-      } else {
-        // Aquí puedes manejar el error si el login falla
-        console.error('Login failed');
-      }
-    });
-  }
 
   close(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(); 
   }
 }

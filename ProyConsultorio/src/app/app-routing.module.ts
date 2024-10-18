@@ -5,6 +5,7 @@ import { LoginComponent } from './componentes/login/login.component';
 import { RegisterComponent } from './componentes/register/register.component';
 import { FooterComponent } from './componentes/footer/footer.component';
 import { HeaderComponent } from './componentes/header/header.component';
+import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,7 +13,11 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'footer', component: FooterComponent },
   { path: 'header', component: HeaderComponent },
-  // { path: '**', redirectTo: '', pathMatch: 'full' } // Redireccionar cualquier ruta desconocida a Home
+  { path: 'home-usuario', component: HomeUsuariosComponent },
+  // { path: '', redirectTo: '/login', pathMatch: 'full' },
+  // { path: 'admin', component: AdminComponent },
+  // { path: 'operador', component: OperadorComponent },
+  // { path: 'medico', component: MedicoComponent },
 ];
 
 @NgModule({

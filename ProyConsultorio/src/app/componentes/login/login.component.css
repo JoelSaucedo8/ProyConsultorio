@@ -47,35 +47,35 @@ h1 {
 }
 
 .custom-input:focus {
-  border-color: #239628; /* Color del borde al enfocarse */
-  outline: none; /* Remueve el contorno del navegador */
+  border-color: #239628; 
+  outline: none; 
 }
 
 button {
-  margin-top: 20px; /* Margen superior para separar del contenido anterior */
-  padding: 10px 20px; /* Espaciado interno */
-  font-size: 16px; /* Tamaño del texto */
-  border: none; /* Sin borde visible */
-  border-radius: 25px; /* Bordes redondeados */
-  cursor: pointer; /* Cambia el cursor al pasar por encima */
-  transition: background-color 0.3s, transform 0.2s; /* Efectos de transición para el hover */
+  margin-top: 20px; /* separar del contenido anterior */
+  padding: 10px 20px; /* espacio interno */
+  font-size: 16px; 
+  border: none; 
+  border-radius: 25px; 
+  cursor: pointer; /* cursor */
+  transition: background-color 0.3s, transform 0.2s; 
 }
 
 #aceptar {
-  background-color: #4CAF50; /* Verde para el botón aceptar */
-  color: white; /* Texto blanco */
+  background-color: #4CAF50; /* boton aceptar */
+  color: white; /* texto blanco */
 }
 
 #aceptar:hover {
-  background-color: #45a049; /* Cambio de color al pasar el mouse */
-  transform: scale(1.05); /* Efecto de crecimiento al pasar el mouse */
+  background-color: #45a049; 
+  transform: scale(1.05); /* crecimiento al pasar el mouse */
 }
 
 #cancelar {
-  background-color: rgba(226, 20, 20, 0.76); /* Rojo para el botón cancelar */
-  color: white; /* Texto blanco */
+  background-color: rgba(226, 20, 20, 0.76); /*boton cancelar */
+  color: white; /* texto blanco */
 }
 
 #cancelar:hover {
-  background-color: rgba(200, 0, 0, 0.9); /* Cambio de color al pasar el mouse */
+  background-color: rgba(200, 0, 0, 0.9); 
 }

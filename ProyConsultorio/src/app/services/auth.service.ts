@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,26 +10,35 @@ export class AuthService {
 
   private userName: string | null = null; // almacenar nombre de usuario logueado
   private role: string | null = null; // almacena rol de usuario
+  currentRoleSubject: any;
 
   login(username: string, password: string): Observable<boolean> {
-    const role = this.getRoleBasedOnCredentials(username, password);
-    if (role) {
-      this.userName = username; // asigna nombre de usuario
-      this.role = role; // asigna rol
-      this.isLoggedInSubject.next(true);
-      return of(true); // retorna mensaje exitoso
-    } else {
-      return of(false); //retorna falso si los datos no son correctos
-    }
-  }
+    console.log(`Intentando iniciar sesión con usuario: ${username} y contraseña: ${password}`);
+    return of(this.getRoleBasedOnCredentials(username, password)).pipe(
+        map(role => {
+            console.log(`Rol encontrado: ${role}`);
+            if (role) {
+                this.currentRoleSubject.next(role);
+                return true;
+            } else {
+                return false;
+            }
+        }),
+        catchError(err => {
+            console.error('Error en el login:', err);
+            return of(false);
+        })
+    );
+}
 
-  getRoleBasedOnCredentials(username: string, password: string): string | null {
-    if (username === 'admin' && password === 'adminpass') return 'admin';
-    if (username === 'operador' && password === 'operadorpass') return 'operador';
-    if (username === 'medico' && password === 'medicopass') return 'medico';
-    if (username === 'paciente' && password === 'pacientepass') return 'paciente';
-    return null; // retorna null al no encontrar rol
-  }
+getRoleBasedOnCredentials(username: string, password: string): string | null {
+  if (username === 'admin' && password === 'adminpass') return 'admin';
+  if (username === 'operador' && password === 'operadorpass') return 'operador';
+  if (username === 'medico' && password === 'medicopass') return 'medico';
+  if (username === 'paciente' && password === 'pacientepass') return 'paciente';
+  return null;
+}
+
 
   logout(): void {
     this.isLoggedInSubject.next(false);

@@ -1,0 +1,61 @@
+/* Estilos para la barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3caa60;
+    padding: 10px 20px;
+  }
+
+  .logo {
+    height: 40px; 
+    cursor: pointer;
+}
+  
+  .menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 50px;
+  }
+  
+  .menu li a {
+    text-decoration: none;
+    color: #000;
+    gap: 50px;
+    font-family: "Lexend", sans-serif;
+  }
+  
+  .menu li a:hover {
+    text-decoration: underline;
+  }
+  
+  .user-info img {
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  /* area del contenido principal */
+  .content-area {
+    background-color: #68b368; 
+    height: calc(100vh - 60px); 
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon {
+    width: 30px; /*ancho*/
+    height: 50px; /*altura*/
+    max-width: 30px;  
+    max-height: 25px;
+  }
+  
+  .font{
+    font-family: "Lexend", sans-serif;
+  }
+  
+  

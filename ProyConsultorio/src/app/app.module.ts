@@ -7,13 +7,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
+
 // Componentes
 import { FooterComponent } from './componentes/footer/footer.component';
 import { HeaderComponent } from './componentes/header/header.component';
 import { HomeComponent } from './componentes/home/home.component';
 import { LoginComponent } from './componentes/login/login.component';
 import { RegisterComponent } from './componentes/register/register.component';
-import { HomeUsuarioComponent } from './componentes/home-usuario/home-usuario.component';
+import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { HomeUsuarioComponent } from './componentes/home-usuario/home-usuario.co
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    HomeUsuarioComponent,
+    HomeUsuariosComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,3 +38,5 @@ import { HomeUsuarioComponent } from './componentes/home-usuario/home-usuario.co
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export class RegisterModule { }
