@@ -22,7 +22,7 @@ export class HomeComponent {
       image: 'assets/imagenes/doctor1.jpeg',
     },
     {
-      name: 'Dra. Ana López',
+      name: 'Dra. Ana Lopez',
       specialty: '- Pediatra',
       description: `Lo que más me gusta de mi profesión es poder acompañar a los niños y sus familias`,
       image: 'assets/imagenes/doctor2.jpeg',

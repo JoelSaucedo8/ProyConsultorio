@@ -5,21 +5,95 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
 
-<div class="navbar">
-  <div class="logo">
-    <img src="assets/imagenes/logoClinic.PNG" class="logo" (click)="home()" />
-  </div>
-  <ul class="menu">
-    <li><a href="#">Solicitar Turnos</a></li>
-    <li><a href="#">Mis Turnos</a></li>
-    <li><a href="#">Modificar Datos Personales</a></li>
-  </ul>
-  <div class="user-info">
-    <img src="assets/imagenes/user.PNG" alt="icon" class="icon"/>
-    <span class="font">Nombre usuario</span>
-  </div>
-</div>
+<body>
+  <div class="page-container">
+    <!-- Header -->
+    <header class="navbar">
+      <img src="assets/imagenes/logoClinic.PNG" class="logo" alt="Logo" (click)="home()" />
+      <div class="user-info">
+        <img src="assets/imagenes/user.PNG" class="icon" alt="User Icon" />
+        <span class="font">Nombre Usuario</span>
+      </div>
+    </header>
 
-<div class="content-area">
-  <!-- contenido de cada sección -->
-</div>
+    <div class="content-area">
+      <div class="form-container">
+        <h3>Solicitar Turno</h3>
+        <form (ngSubmit)="onSubmit()" #turnoForm="ngForm">
+          <!-- Campos del formulario de solicitud de turno -->
+          <div class="form-group">
+            <label for="cobertura">Cobertura:</label>
+            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required (change)="onCoberturaChange()">
+              <option value="" disabled selected>Selecciona una cobertura</option>
+              <option *ngFor="let cobertura of coberturas" [value]="cobertura">{{ cobertura }}</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="turno.cobertura">
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidad" [(ngModel)]="turno.especialidad" name="especialidad" required (change)="onEspecialidadChange()">
+              <option value="" disabled selected>Selecciona una especialidad</option>
+              <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="turno.especialidad">
+            <label for="profesional">Profesional:</label>
+            <select id="profesional" [(ngModel)]="turno.profesional" name="profesional" required>
+              <option value="" disabled selected>Selecciona un profesional</option>
+              <option *ngFor="let profesional of profesionales" [value]="profesional">{{ profesional }}</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="turno.profesional">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required (change)="onFechaChange()">
+          </div>
+
+          <div class="form-group" *ngIf="turno.fecha">
+            <label for="hora">Hora:</label>
+            <select id="hora" [(ngModel)]="turno.hora" name="hora" required>
+              <option value="" disabled selected>Selecciona una hora</option>
+              <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="turno.hora">
+            <label for="notas">Notas:</label>
+            <textarea id="notas" [(ngModel)]="turno.notas" name="notas" required></textarea>
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" [disabled]="!turnoForm.valid">Aceptar</button>
+            <button type="button" (click)="cancelar()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-container">
+        <h3>Mis Turnos</h3>
+        <div class="turnos-list">
+          <div *ngFor="let turno of turnos" class="turno" (click)="mostrarDetalles(turno)">
+            <strong>Fecha:</strong> {{ formatearFecha(turno.fecha) }}<br />
+            <strong>Hora:</strong> {{ turno.hora }}<br />
+            <strong>Profesional:</strong> {{ turno.profesional }}<br />
+            <strong>Especialidad:</strong> {{ turno.especialidad }}
+            <button (click)="borrarTurno(turno)">Borrar</button> <!-- Botón para borrar el turno -->
+          </div>
+        </div>
+        
+        <div *ngIf="turnoSeleccionado" class="detalles-turno">
+          <h4>Detalles del Turno</h4>
+          <p>Fecha: {{ formatearFecha(turnoSeleccionado.fecha) }}</p>
+          <p>Hora: {{ turnoSeleccionado.hora }}</p>
+          <p>Profesional: {{ turnoSeleccionado.profesional }}</p>
+          <p>Especialidad: {{ turnoSeleccionado.especialidad }}</p>
+          <button (click)="cerrarDetalles()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer"></footer>
+  </div>
+</body>
