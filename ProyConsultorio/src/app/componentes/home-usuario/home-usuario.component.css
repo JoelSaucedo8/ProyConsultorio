@@ -1,10 +1,9 @@
-/* Estilo global */
 * {
-  box-sizing: border-box; /* Incluye el padding y el border en el ancho total */
+  box-sizing: border-box; 
 }
 
 html, body {
-  height: 100%; /* Asegura que el body ocupe el 100% de la altura */
+  height: 100%; 
   margin: 0;
   padding: 0;
   font-family: 'Lexend', sans-serif;
@@ -14,7 +13,7 @@ html, body {
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Asegura que ocupe el 100% de la pantalla */
+  min-height: 100vh; 
 }
 
 .navbar {
@@ -27,7 +26,7 @@ html, body {
 
 .logo {
   height: 50px;
-  cursor: pointer; /* Cambia el cursor al pasar el mouse sobre el logo */
+  cursor: pointer; 
 }
 
 .user-info {
@@ -37,7 +36,7 @@ html, body {
 
 .user-info .icon {
   width: 40px;
-  height: 40px; /* Ajusta el tamaño del icono según sea necesario */
+  height: 30px; 
   border-radius: 50%;
   margin-right: 10px;
 }
@@ -48,17 +47,17 @@ html, body {
   color: #1b1a1a;
 }
 
-/* Área de contenido principal */
+/* contenido principal */
 .content-area {
   display: flex;
-  flex-grow: 1; /* Permite que el contenido crezca */
+  flex-grow: 1; 
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
   overflow-y: auto;
 }
 
-/* Ajustar contenedor de formularios para alineación */
+/* contenedor de formularios para alineación */
 .form-container {
   background-color: #2f8a55;
   padding: 20px;
@@ -69,15 +68,15 @@ html, body {
   margin: 20px;
 }
 
-/* Espacio entre campos del formulario */
+/* espacio entre campos del formulario */
 .form-group {
-  margin-bottom: 20px; /* Espacio entre los campos del formulario */
+  margin-bottom: 20px; 
 }
 
-/* Estilo específico para los formularios */
+/* formularios */
 .turnos-list {
-  max-height: 400px; /* Ajusta la altura máxima de la lista */
-  overflow-y: auto; /* Permitir scroll si hay demasiados turnos */
+  max-height: 400px; 
+  overflow-y: auto; 
 }
 
 .turno {
@@ -90,7 +89,7 @@ html, body {
 }
 
 .turno:hover {
-  background-color: #c8e6c9; /* Color de fondo al pasar el mouse */
+  background-color: #c8e6c9; 
 }
 
 .detalles-turno {
@@ -100,7 +99,6 @@ html, body {
   border-radius: 5px;
 }
 
-/* Estilos para el footer */
 .footer {
   background-color: #52b176;
   padding: 10px;
@@ -108,27 +106,62 @@ html, body {
   flex-shrink: 0;
   width: 100%;
   position: relative;
-  margin-top: auto; /* Asegura que el footer quede al fondo si el contenido no llena toda la página */
+  margin-top: auto; 
 }
 
-/* Consultas de medios para ajustar en pantallas pequeñas */
+/* botones */
+.btn-aceptar,
+.btn-cancelar {
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 5px; 
+  font-size: 16px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+}
+
+.btn-aceptar {
+  background-color: #2d9e30; 
+  color: white; 
+}
+
+.btn-aceptar:disabled {
+  background-color: #ccc; 
+  cursor: not-allowed; 
+}
+
+.btn-aceptar:hover:not(:disabled) {
+  background-color: #215323; 
+}
+
+.btn-cancelar {
+  background-color: #ac271e; 
+  color: white; 
+  margin-left: 10px; 
+}
+
+.btn-cancelar:hover {
+  background-color: #8a0f0d; 
+}
+
+/* ajustar en pantallas pequeñas */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
-    align-items: flex-start; /* Alinear el contenido en columna */
+    align-items: flex-start;
   }
 
   .user-info {
-    justify-content: flex-end; /* Mantener el usuario alineado a la derecha en pantallas pequeñas */
+    justify-content: flex-end; 
     width: 100%;
   }
 
   .form-container {
-    max-width: 100%; /* Formulario más ancho en pantallas pequeñas */
+    max-width: 100%; 
   }
 
   .content-area {
-    flex-direction: column; /* Cambia la dirección a columna en pantallas pequeñas */
-    align-items: center; /* Centra los formularios */
+    flex-direction: column; 
+    align-items: center; 
   }
 }

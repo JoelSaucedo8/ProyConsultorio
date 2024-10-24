@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,42 +10,53 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtener datos del backend
-  getData(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/obtenerUsuarios`); // Correcto uso de backticks para interpolar la URL
+  // Manejo de errores
+  private handleError(error: any) {
+    console.error('Ocurrió un error:', error);
+    return throwError(() => new Error('Error en la petición. Por favor intenta de nuevo.'));
   }
 
-  // Registrar un nuevo usuario
+  // Obtener todos los usuarios
+  getData(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerUsuarios`)
+      .pipe(catchError(this.handleError)); // agrega manejo de errores
+  }
+
+  // Registrar nuevo usuario
   registerUser(newUser: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token') // Para incluir el token si es necesario
+      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
     });
-    return this.http.post<any>(`${this.apiUrl}/crearUsuario`, newUser, { headers }); // Uso correcto de backticks
+    return this.http.post<any>(`${this.apiUrl}/crearUsuario`, newUser, { headers })
+      .pipe(catchError(this.handleError)); 
   }
 
-  // Obtener un usuario por ID
+  // Obtener usuario por ID
   getUsuario(id: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + localStorage.getItem('token') // Incluir token si es necesario
+      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
     });
-    return this.http.get<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, { headers }); // Uso correcto de backticks
+    return this.http.get<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, { headers })
+      .pipe(catchError(this.handleError)); 
   }
 
   // Actualizar un usuario
   updateUsuario(id: string, updatedUser: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token') // Incluir token si es necesario
+      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
     });
-    return this.http.put<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, updatedUser, { headers }); // Uso correcto de backticks
+    return this.http.put<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, updatedUser, { headers })
+      .pipe(catchError(this.handleError)); 
   }
 
-  // Borrar un usuario
+  // Eliminar un usuario
   deleteUsuario(id: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + localStorage.getItem('token') // Incluir token si es necesario
+      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
     });
-    return this.http.delete<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, { headers }); // Uso correcto de backticks
+    return this.http.delete<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, { headers })
+      .pipe(catchError(this.handleError)); 
   }
 }

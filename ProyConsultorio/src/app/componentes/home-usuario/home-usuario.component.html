@@ -7,7 +7,6 @@
 
 <body>
   <div class="page-container">
-    <!-- Header -->
     <header class="navbar">
       <img src="assets/imagenes/logoClinic.PNG" class="logo" alt="Logo" (click)="home()" />
       <div class="user-info">
@@ -20,7 +19,7 @@
       <div class="form-container">
         <h3>Solicitar Turno</h3>
         <form (ngSubmit)="onSubmit()" #turnoForm="ngForm">
-          <!-- Campos del formulario de solicitud de turno -->
+          <!--formulario de solicitud de turno -->
           <div class="form-group">
             <label for="cobertura">Cobertura:</label>
             <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required (change)="onCoberturaChange()">
@@ -63,13 +62,13 @@
             <textarea id="notas" [(ngModel)]="turno.notas" name="notas" required></textarea>
           </div>
 
-          <div class="form-buttons">
-            <button type="submit" [disabled]="!turnoForm.valid">Aceptar</button>
-            <button type="button" (click)="cancelar()">Cancelar</button>
+          <div>
+            <button type="submit" [disabled]="!turnoForm.valid" class="btn-aceptar">Aceptar</button>
+            <button type="button" (click)="cancelar()" class="btn-cancelar">Cancelar</button>
           </div>
         </form>
       </div>
-
+      
       <div class="form-container">
         <h3>Mis Turnos</h3>
         <div class="turnos-list">
@@ -77,7 +76,8 @@
             <strong>Fecha:</strong> {{ formatearFecha(turno.fecha) }}<br />
             <strong>Hora:</strong> {{ turno.hora }}<br />
             <strong>Profesional:</strong> {{ turno.profesional }}<br />
-            <strong>Especialidad:</strong> {{ turno.especialidad }}
+            <strong>Especialidad:</strong> {{ turno.especialidad }}<br />
+            <strong>Notas:</strong> {{turno.notas}}<br />
             <button (click)="borrarTurno(turno)">Borrar</button> <!-- Botón para borrar el turno -->
           </div>
         </div>
@@ -88,6 +88,7 @@
           <p>Hora: {{ turnoSeleccionado.hora }}</p>
           <p>Profesional: {{ turnoSeleccionado.profesional }}</p>
           <p>Especialidad: {{ turnoSeleccionado.especialidad }}</p>
+          <p>Notas: {{ turnoSeleccionado.notas }}</p>
           <button (click)="cerrarDetalles()">Cerrar</button>
         </div>
       </div>

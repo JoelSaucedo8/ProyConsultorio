@@ -1,4 +1,4 @@
-// app.module.ts
+// Modulos
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 // Componentes
@@ -28,11 +29,12 @@ import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.c
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule, // Asegúrate de que esto esté aquí
+    AppRoutingModule,
     BrowserAnimationsModule,
     MatDialogModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

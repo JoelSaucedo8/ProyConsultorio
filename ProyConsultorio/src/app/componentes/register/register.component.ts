@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router'; // Importar Router
+import { Router } from '@angular/router'; 
+import { AuthService } from 'src/app/services/auth.service'; 
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -16,19 +19,17 @@ export class RegisterComponent {
   password: string = '';
   confirmPassword: string = '';
 
-  constructor(private router: Router) {} // Inyección del Router
+  constructor(private router: Router, private authService: AuthService) {} 
 
-  // Abre el modal
   openRegister(): void {
     this.isRegisterOpen = true;
   }
 
-  // Cierra el modal de registro
   closeRegister(): void {
     this.isRegisterOpen = false;
   }
 
-  // Valida el campo y simula el envío de formulario 
+  //valida campo y simula el envio de formulario 
   submitRegister(): void {
     if (!this.nombre || !this.apellido || !this.documento || !this.correo || !this.telefono || !this.password || !this.confirmPassword) {
       alert("Por favor, complete todos los campos.");
@@ -40,12 +41,31 @@ export class RegisterComponent {
       return;
     }
 
-    console.log("Formulario de registro enviado");
-    alert("Registro exitoso");
-    this.closeRegister(); // Cierra el modal después de un registro exitoso
+    const userData = {
+      nombre: this.nombre,
+      apellido: this.apellido,
+      documento: this.documento,
+      correo: this.correo,
+      telefono: this.telefono,
+      password: this.password
+    };
+
+    this.authService.register(userData).pipe(
+      catchError(err => {
+        console.error('Error en el registro:', err);
+        alert('Error al registrar. Inténtalo nuevamente.');
+        return of(null);
+      })
+    ).subscribe((response: any) => {
+      if (response) {
+        console.log("Formulario de registro enviado");
+        alert("Registro exitoso");
+        this.closeRegister(); // cierre registro exitoso
+      }
+    });
   }
 
-  // Navega a la página de inicio
+  // vuelve a pag de inicio
   home(): void {
     this.router.navigate(['/']);
   }

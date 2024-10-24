@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  username: string = 'user';
-  password: string = '12345';
+  documento: string = ''; 
+  password: string = ''; 
 
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
@@ -20,9 +20,15 @@ export class LoginComponent {
 
   iniciar(): void {
     console.log('Intentando iniciar sesión...');
-            this.router.navigate(['/home-usuario']); //se dirige al componente home-usuario
-            this.close() 
-        }
+    this.authService.login(this.documento, this.password).subscribe(success => {
+      if (success) {
+        this.router.navigate(['/home-usuario']); // lleva a home-usuario
+        this.close();
+      } else {
+        console.error('Error en las credenciales'); // Manejo de error
+      }
+    });
+  }
 
   close(): void {
     this.dialogRef.close(); 

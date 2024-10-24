@@ -1,95 +1,93 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Turno } from 'src/app/interfaces/home-usuario.interface';
+import { DataService } from 'src/app/services/dataservice'; 
 
 @Component({
   selector: 'app-home-usuarios',
   templateUrl: './home-usuario.component.html',
   styleUrls: ['./home-usuario.component.css']
 })
-export class HomeUsuariosComponent {
-  // Listado de coberturas, especialidades, profesionales y horas disponibles
-  coberturas = ['Cobertura A', 'Cobertura B', 'Cobertura C']; // Ejemplo de coberturas
-  especialidades = ['Cardiología', 'Pediatría', 'Dermatología']; // Ejemplo de especialidades
-  profesionales = ['Dr. Juan Pérez', 'Dr. Ana Lopez', 'Dra. María González']; // Ejemplo de profesionales
-  horasDisponibles = ['09:00', '10:00', '11:00', '14:00', '15:00']; // Horas disponibles
+export class HomeUsuariosComponent implements OnInit {
+  // lista
+  coberturas = ['Cobertura A', 'Cobertura B', 'Cobertura C'];
+  especialidades = ['Cardiología', 'Pediatría', 'Dermatología'];
+  profesionales = ['Dr. Juan Pérez', 'Dr. Ana Lopez', 'Dra. María González'];
+  horasDisponibles = ['09:00', '10:00', '11:00', '14:00', '15:00'];
 
-  // Objeto para el formulario de solicitud de turno
+  // formulario de solicitud de turno
   turno = {
     cobertura: '',
     especialidad: '',
     profesional: '',
     fecha: '',
     hora: '',
-    notas: '', // Campo de notas en el formulario
+    notas: '',
   };
 
-  // Control de popup de confirmación
+  // popup de confirmacion
   popupVisible = false;
-  home: any;
+  turnos: Turno[] = []; // array vacío
 
-  // Arreglo de turnos
-  turnos: Turno[] = [
-    {
-      fecha: new Date('2024-09-30'),
-      hora: '15:00',
-      profesional: 'Dr. Pedro Luis Pérez',
-      especialidad: 'Traumatología',
-      notas: 'Traer estudios anteriores' // Notas para el primer turno
-    },
-    {
-      fecha: new Date('2024-10-05'),
-      hora: '10:00',
-      profesional: 'Dra. Ana María López',
-      especialidad: 'Dermatología',
-      notas: 'Consultar sobre tratamiento de la piel' // Notas para el segundo turno
-    }
-  ];
-
-  // Turno seleccionado para mostrar detalles
   turnoSeleccionado: Turno | null = null;
+userName: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dataService: DataService) {}
 
-  // Método para borrar un turno
+  ngOnInit() {
+    this.cargarTurnos(); // carga el turno al iniciar el componente
+  }
+
+  // cargar los turnos desde el backend
+  cargarTurnos() {
+    this.dataService.getData().subscribe({
+      next: (data) => {
+        // Acceder a la propiedad correcta que contiene el array de turnos
+        this.turnos = data.turnos || []; // Usar un array vacío como fallback
+      },
+      error: (err) => {
+        console.error('Error al cargar los turnos', err);
+      }
+    });
+  }
+    
+  // borrar un turno
   borrarTurno(turno: Turno) {
     const confirmacion = confirm('¿Estás seguro de que deseas borrar este turno?');
     if (confirmacion) {
       this.turnos = this.turnos.filter(t => t !== turno);
+      // acá se puede agregar una llamada al servicio para borrar el turno en el backend
     }
   }
 
-  // Método para manejar cambios en la cobertura
+  // cambios en la cobertura
   onCoberturaChange() {
-    // Lógica para actualizar especialidades basadas en la cobertura seleccionada
+    // especialidades en la cobertura seleccionada
   }
 
-  // Método para manejar cambios en la especialidad
+  // cambios en la especialidad
   onEspecialidadChange() {
-    // Lógica para actualizar profesionales basados en la especialidad seleccionada
+    // profesionales basados en la especialidad seleccionada
   }
 
-  // Método para manejar cambios en la fecha
+  // cambios en la fecha
   onFechaChange() {
-    // Lógica para actualizar horas disponibles basadas en la fecha seleccionada
+    // horas disponibles en la fecha seleccionada
   }
 
-  // Método que se ejecuta al enviar el formulario de turno
+  // se ejecuta al enviar el formulario de turno
   onSubmit() {
-    // Validar que el formulario esté completo antes de agregar el turno
     if (this.turno.cobertura && this.turno.especialidad && this.turno.profesional && this.turno.fecha && this.turno.hora && this.turno.notas) {
-      // Crear un nuevo objeto de tipo Turno
       const nuevoTurno: Turno = {
-        fecha: new Date(this.turno.fecha), // Convertir la fecha a Date
+        fecha: new Date(this.turno.fecha),
         hora: this.turno.hora,
         profesional: this.turno.profesional,
         especialidad: this.turno.especialidad,
-        notas: this.turno.notas // Añadir la nota al nuevo turno
+        notas: this.turno.notas
       };
 
-      // Agregar el nuevo turno al arreglo de turnos
       this.turnos.push(nuevoTurno);
 
-      // Limpiar el formulario
       this.turno = {
         cobertura: '',
         especialidad: '',
@@ -99,38 +97,38 @@ export class HomeUsuariosComponent {
         notas: '',
       };
 
-      // Cerrar el popup de confirmación si es necesario
       this.popupVisible = false;
 
-      // Mostrar mensaje o realizar alguna otra acción después de la creación del turno
       alert('Turno agregado con éxito');
     } else {
       alert('Por favor, complete todos los campos antes de enviar el formulario.');
     }
   }
 
-  // Método para cancelar el registro de turno y regresar a la pantalla principal
+  //cancela y vuelve a la pantalla principal
   cancelar() {
-    // Navegar a la página principal
     this.router.navigate(['/']);
   }
 
-  // Método para cerrar el popup de confirmación
+  // popup de confirmacion
   cerrarPopup() {
-    // Cerrar el popup
     this.popupVisible = false;
   }
 
-  // Método para mostrar los detalles del turno seleccionado
   mostrarDetalles(turno: Turno) {
     this.turnoSeleccionado = turno;
   }
-  // Método para cerrar la vista de detalles del turno
+
   cerrarDetalles() {
-    this.turnoSeleccionado = null; // Restablecer la selección
+    this.turnoSeleccionado = null; 
   }
 
-  // Método para formatear la fecha en formato "es-ES" (español)
+  // vuelve pag principal
+  home(): void {
+    this.router.navigate(['/']);
+  }
+
+  // fecha en español
   formatearFecha(fecha: Date): string {
     return fecha.toLocaleDateString('es-ES', {
       year: 'numeric',
