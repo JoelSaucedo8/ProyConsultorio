@@ -19,7 +19,7 @@ export class DataService {
   registerUser(newUser: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token') // Para incluir el token si es necesario
+      'Authorization': 'Bearer '
     });
     return this.http.post<any>(`${this.apiUrl}/crearUsuario`, newUser, { headers });
   }
