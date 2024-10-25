@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { Turno } from '../interfaces/home-usuario.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,34 +19,41 @@ export class AuthService {
 
   // Método para registrar un nuevo usuario
   register(userData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
+    return this.http.post<any>(`${this.apiUrl}/crearUsuario`, userData).pipe(
       map(response => {
-        // Puedes manejar la respuesta según lo que devuelva tu backend
-        return response; 
+        // Verifica si la respuesta es exitosa
+        if (response && response.codigo === 200) {
+          const user = response.payload[0]; // Accede a la información del usuario
+          this.userName = user.nombre; // Almacena el nombre de usuario
+          this.role = user.rol; // Almacena el rol del usuario
+          this.currentRoleSubject.next(this.role); // Actualiza el rol actual
+          this.isLoggedInSubject.next(true); // Actualiza el estado de inicio de sesión
+        }
+        return response; // Devuelve la respuesta
       }),
       catchError(err => {
         console.error('Error en el registro:', err);
-        return of(null); // Devuelve null en caso de error
+        return of(null); // Maneja errores
       })
     );
   }
 
-  // iniciar sesion
+  // Iniciar sesión
   login(usuario: string, password: string): Observable<boolean> {
     console.log(`Intentando iniciar sesión con usuario: ${usuario} y contraseña: ${password}`);
     return this.http.post<{ codigo: number, mensaje: string, payload: any, jwt: string }>(this.apiUrl + '/login', { usuario, password }).pipe(
       map(response => {
         if (response.codigo === 200) {
-          const token = response.jwt; // token jwt de la respuesta
-          localStorage.setItem('token', token); // almacena el token en localStorage
+          const token = response.jwt; // Token JWT de la respuesta
+          localStorage.setItem('token', token); // Almacena el token en localStorage
           const user = response.payload[0]; // Asegúrate de que estás accediendo al primer elemento del payload
-          this.userName = user.nombre; // almacena nombre de usuario
-          this.role = user.rol; // almacena rol del usuario
-          this.currentRoleSubject.next(this.role); // rol actual
-          this.isLoggedInSubject.next(true); // actualizar estado de inicio de sesión
-          return true; // login exitoso
+          this.userName = user.nombre; // Almacena nombre de usuario
+          this.role = user.rol; // Almacena rol de usuario
+          this.currentRoleSubject.next(this.role); // Rol actual
+          this.isLoggedInSubject.next(true); // Actualiza el estado de inicio de sesión
+          return true; // Login exitoso
         } else {
-          return false; // login fallido
+          return false; // Login fallido
         }
       }),
       catchError(err => {
@@ -55,7 +63,7 @@ export class AuthService {
     );
   }
 
-  // obtiene las cabeceras con el token
+  // Obtiene las cabeceras con el token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token'); 
     return new HttpHeaders({
@@ -64,20 +72,71 @@ export class AuthService {
     });
   }
 
-  //cerrar sesion
+  // Cerrar sesión
   logout(): void {
     this.isLoggedInSubject.next(false);
-    this.userName = null; // eliminar nombre de usuario
-    this.role = null; // eliminar rol al iniciar sesión
-    this.currentRoleSubject.next(null); // eliminar rol actual
-    localStorage.removeItem('token'); // eliminar token de localStorage
+    this.userName = null; // Elimina nombre de usuario
+    this.role = null; // Elimina rol al iniciar sesión
+    this.currentRoleSubject.next(null); // Elimina rol actual
+    localStorage.removeItem('token'); // Elimina token de localStorage
   }
 
   getUserName(): string | null {
-    return this.userName; // usuario logueado
+    return this.userName; // Usuario logueado
   }
 
   getRole(): string | null {
-    return this.role; // rol del usuario al loguearse
+    return this.role; // Rol del usuario al loguearse
+  }
+
+  // Obtener turnos del paciente
+  getTurnos(userId: string): Observable<Turno[]> {
+    const turnosGuardados = localStorage.getItem(`turnos_${userId}`);
+    if (turnosGuardados) {
+      return of(JSON.parse(turnosGuardados) as Turno[]);
+    } else {
+      return this.http.get<Turno[]>(`${this.apiUrl}/obtenerTurnoPaciente/${userId}`).pipe(
+        map(turnos => {
+          localStorage.setItem(`turnos_${userId}`, JSON.stringify(turnos));
+          return turnos;
+        }),
+        catchError((error) => {
+          console.error('Error al obtener turnos:', error);
+          return of([]);
+        })
+      );
+    }
+  }
+
+  // Agregar un nuevo turno y guardarlo en localStorage
+  addTurno(turno: Turno): Observable<Turno | null> { // Cambiado a Observable<Turno | null>
+    return this.http.post<Turno>(`${this.apiUrl}/asignarTurnoPaciente`, turno).pipe(
+      map(nuevoTurno => {
+        const userId = turno.id_paciente; // Ajusta según cómo se maneje el ID del usuario
+        const turnos = JSON.parse(localStorage.getItem(`turnos_${userId}`) || '[]');
+        turnos.push(nuevoTurno);
+        localStorage.setItem(`turnos_${userId}`, JSON.stringify(turnos));
+        return nuevoTurno;
+      }),
+      catchError((error) => {
+        console.error('Error al asignar turno:', error);
+        return of(null); // Devuelve null en caso de error
+      })
+    );
+  }
+  
+  // Borrar un turno de localStorage y del backend
+  deleteTurno(turnoId: string, userId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/eliminarTurnoPaciente/${turnoId}`).pipe(
+      map(() => {
+        const turnos = JSON.parse(localStorage.getItem(`turnos_${userId}`) || '[]');
+        const turnosActualizados = turnos.filter((turno: Turno) => turno.id !== turnoId);
+        localStorage.setItem(`turnos_${userId}`, JSON.stringify(turnosActualizados));
+      }),
+      catchError((error) => {
+        console.error('Error al eliminar turno:', error);
+        return of();
+      })
+    );
   }
 }

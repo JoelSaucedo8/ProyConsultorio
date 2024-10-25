@@ -18,6 +18,7 @@ export class RegisterComponent {
   telefono: string = '';
   password: string = '';
   confirmPassword: string = '';
+navigateToHome: any;
 
   constructor(private router: Router, private authService: AuthService) {} 
 
@@ -29,7 +30,7 @@ export class RegisterComponent {
     this.isRegisterOpen = false;
   }
 
-  //valida campo y simula el envio de formulario 
+  // Valida campo y simula el envío de formulario 
   submitRegister(): void {
     if (!this.nombre || !this.apellido || !this.documento || !this.correo || !this.telefono || !this.password || !this.confirmPassword) {
       alert("Por favor, complete todos los campos.");
@@ -41,13 +42,16 @@ export class RegisterComponent {
       return;
     }
 
+    // Crear el objeto userData con los campos correctos
     const userData = {
-      nombre: this.nombre,
+      dni: this.documento, 
       apellido: this.apellido,
-      documento: this.documento,
-      correo: this.correo,
-      telefono: this.telefono,
-      password: this.password
+      nombre: this.nombre,
+      fecha_nacimiento: '', 
+      password: this.password,
+      rol: '', 
+      email: this.correo,
+      telefono: this.telefono
     };
 
     this.authService.register(userData).pipe(
@@ -60,12 +64,13 @@ export class RegisterComponent {
       if (response) {
         console.log("Formulario de registro enviado");
         alert("Registro exitoso");
-        this.closeRegister(); // cierre registro exitoso
+        this.closeRegister(); 
+        this.router.navigate(['/home-usuario']); 
       }
     });
   }
 
-  // vuelve a pag de inicio
+  // Vuelve a la página de inicio
   home(): void {
     this.router.navigate(['/']);
   }

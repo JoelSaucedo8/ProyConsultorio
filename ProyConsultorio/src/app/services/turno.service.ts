@@ -7,22 +7,29 @@ import { Turno } from '../interfaces/home-usuario.interface';
   providedIn: 'root',
 })
 export class TurnoService {
-  private apiUrl = 'http://localhost:4000/api/turnos'; 
+  private apiUrlObtener = 'http://localhost:4000/api/obtenerTurnoPaciente'; //obtener turnos
+  private apiUrlAsignar = 'http://localhost:4000/api/asignarTurnoPaciente'; //asignar/agregar turnos
+  agregarTurno: any;
 
   constructor(private http: HttpClient) {}
 
-  // obtener los turnos
-  getTurnos(): Observable<Turno[]> {
-    return this.http.get<Turno[]>(this.apiUrl);
+  // Obtener los turnos
+  getTurnos(userId: string): Observable<Turno[]> {
+    return this.http.get<Turno[]>(`${this.apiUrlObtener}/${userId}`); // iddel usuario
   }
 
-  // agregar un nuevo turno
+  // Agregar un nuevo turno
   addTurno(turno: Turno): Observable<Turno> {
-    return this.http.post<Turno>(this.apiUrl, turno);
+    return this.http.post<Turno>(this.apiUrlAsignar, turno); // Usa la ruta correcta para almacenar
   }
 
-  // borrar un turno
+  // Borrar un turno
   deleteTurno(turnoId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${turnoId}`);
+    return this.http.delete<void>(`${this.apiUrlObtener}/${turnoId}`); // Asegúrate de usar la ruta correcta para eliminar
+  }
+
+  // Almacenar los turnos
+  storeTurno(turno: Turno): Observable<Turno> {
+    return this.addTurno(turno);
   }
 }

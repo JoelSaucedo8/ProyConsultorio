@@ -42,7 +42,7 @@ userName: any;
   cargarTurnos() {
     this.dataService.getData().subscribe({
       next: (data) => {
-        // Acceder a la propiedad correcta que contiene el array de turnos
+        // acceder a la propiedad correcta que contiene el array de turnos
         this.turnos = data.turnos || []; // Usar un array vacío como fallback
       },
       error: (err) => {
@@ -74,7 +74,6 @@ userName: any;
   onFechaChange() {
     // horas disponibles en la fecha seleccionada
   }
-
   // se ejecuta al enviar el formulario de turno
   onSubmit() {
     if (this.turno.cobertura && this.turno.especialidad && this.turno.profesional && this.turno.fecha && this.turno.hora && this.turno.notas) {
@@ -83,7 +82,9 @@ userName: any;
         hora: this.turno.hora,
         profesional: this.turno.profesional,
         especialidad: this.turno.especialidad,
-        notas: this.turno.notas
+        notas: this.turno.notas,
+        id: '',
+        id_paciente: undefined
       };
 
       this.turnos.push(nuevoTurno);
@@ -105,7 +106,7 @@ userName: any;
     }
   }
 
-  //cancela y vuelve a la pantalla principal
+  // cancela y vuelve a la pantalla principal
   cancelar() {
     this.router.navigate(['/']);
   }

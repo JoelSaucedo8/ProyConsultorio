@@ -78,10 +78,10 @@
             <strong>Profesional:</strong> {{ turno.profesional }}<br />
             <strong>Especialidad:</strong> {{ turno.especialidad }}<br />
             <strong>Notas:</strong> {{turno.notas}}<br />
-            <button (click)="borrarTurno(turno)">Borrar</button> <!-- Botón para borrar el turno -->
+            <button (click)="borrarTurno(turno)">Borrar</button>
           </div>
         </div>
-        
+             
         <div *ngIf="turnoSeleccionado" class="detalles-turno">
           <h4>Detalles del Turno</h4>
           <p>Fecha: {{ formatearFecha(turnoSeleccionado.fecha) }}</p>

@@ -26,10 +26,10 @@ export class DataService {
   registerUser(newUser: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
+      'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
     });
     return this.http.post<any>(`${this.apiUrl}/crearUsuario`, newUser, { headers })
-      .pipe(catchError(this.handleError)); 
+      .pipe(catchError(this.handleError));
   }
 
   // Obtener usuario por ID
