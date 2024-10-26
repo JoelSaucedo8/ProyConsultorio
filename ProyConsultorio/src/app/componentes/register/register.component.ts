@@ -45,9 +45,8 @@ export class RegisterComponent {
   // Método para enviar el formulario
   onSubmit(): void {
     this.registerForm.markAllAsTouched();
-    console.log(this.registerForm);
     if (this.registerForm.valid) {
-      console.log('Formulario válido', this.registerForm.value);
+
       const newUser = {
         dni: this.registerForm.value.dni,
         apellido: this.registerForm.value.apellido,
@@ -61,7 +60,6 @@ export class RegisterComponent {
   
       this.dataService.registerUser(newUser).subscribe({
         next: (response) => {
-          console.log(response.mensaje); // Mensaje de éxito
           alert('Registro exitoso');
           
           // Almacenar el token si lo devuelve la API
@@ -72,7 +70,6 @@ export class RegisterComponent {
           this.router.navigate(['home']); // Redirigir tras registro exitoso
         },
         error: (error) => {
-          console.error('Error al crear el usuario', error); // Manejar errores
           alert('Error al crear el usuario: ' + error.error.mensaje || 'Error desconocido');
         },
         complete: () => {
