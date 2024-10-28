@@ -1,10 +1,12 @@
+// En tu interfaz home-usuario.interface.ts
 export interface Turno {
-  id_paciente: any;
- cobertura?: any;
-  id: string; 
   fecha: Date;
   hora: string;
   profesional: string;
   especialidad: string;
-  notas: string; 
+  notas: string;
+  id: string;
+  id_paciente: string;
+  eliminado?: boolean; 
 }
+

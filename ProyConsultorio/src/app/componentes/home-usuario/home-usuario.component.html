@@ -18,35 +18,19 @@
     <div class="content-area">
       <div class="form-container">
         <h3>Solicitar Turno</h3>
-        <form (ngSubmit)="onSubmit()" #turnoForm="ngForm">
+        <form #turnoForm="ngForm">
           <!--formulario de solicitud de turno -->
           <div class="form-group">
             <label for="cobertura">Cobertura:</label>
-            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required (change)="onCoberturaChange()">
+            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required >
               <option value="" disabled selected>Selecciona una cobertura</option>
               <option *ngFor="let cobertura of coberturas" [value]="cobertura">{{ cobertura }}</option>
             </select>
           </div>
 
-          <div class="form-group" *ngIf="turno.cobertura">
-            <label for="especialidad">Especialidad:</label>
-            <select id="especialidad" [(ngModel)]="turno.especialidad" name="especialidad" required (change)="onEspecialidadChange()">
-              <option value="" disabled selected>Selecciona una especialidad</option>
-              <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
-            </select>
-          </div>
-
-          <div class="form-group" *ngIf="turno.especialidad">
-            <label for="profesional">Profesional:</label>
-            <select id="profesional" [(ngModel)]="turno.profesional" name="profesional" required>
-              <option value="" disabled selected>Selecciona un profesional</option>
-              <option *ngFor="let profesional of profesionales" [value]="profesional">{{ profesional }}</option>
-            </select>
-          </div>
-
           <div class="form-group" *ngIf="turno.profesional">
             <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required (change)="onFechaChange()">
+            <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required >
           </div>
 
           <div class="form-group" *ngIf="turno.fecha">
@@ -63,7 +47,7 @@
           </div>
 
           <div>
-            <button type="submit" [disabled]="!turnoForm.valid" class="btn-aceptar">Aceptar</button>
+            <button type="submit" (click)="crearTurnos()" [disabled]="!turnoForm.valid" class="btn-aceptar">Aceptar</button>
             <button type="button" (click)="cancelar()" class="btn-cancelar">Cancelar</button>
           </div>
         </form>
@@ -83,6 +67,7 @@
         </div>
              
         <div *ngIf="turnoSeleccionado" class="detalles-turno">
+          <!-- modificar tamaño de mostrar detalle -->
           <h4>Detalles del Turno</h4>
           <p>Fecha: {{ formatearFecha(turnoSeleccionado.fecha) }}</p>
           <p>Hora: {{ turnoSeleccionado.hora }}</p>
@@ -98,3 +83,5 @@
     <footer class="footer"></footer>
   </div>
 </body>
+
+<!-- <div *ngFor="rol=== roluser"> -->

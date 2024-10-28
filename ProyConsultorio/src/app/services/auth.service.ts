@@ -11,9 +11,10 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  private userName: string | null = null; // almacena nombre de usuario logueado
-  private role: string | null = null; // almacena rol de usuario
+  private userName: string | null = null; // Almacena nombre de usuario logueado
+  private role: string | null = null; // Almacena rol de usuario
   currentRoleSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  getUserId: any;
 
   constructor(private http: HttpClient) {}
 
@@ -41,7 +42,7 @@ export class AuthService {
   // Iniciar sesión
   login(usuario: string, password: string): Observable<boolean> {
     console.log(`Intentando iniciar sesión con usuario: ${usuario} y contraseña: ${password}`);
-    return this.http.post<{ codigo: number, mensaje: string, payload: any, jwt: string }>(this.apiUrl + '/login', { usuario, password }).pipe(
+    return this.http.post<{ codigo: number, mensaje: string, payload: any, jwt: string }>(`${this.apiUrl}/login`, { usuario, password }).pipe(
       map(response => {
         if (response.codigo === 200) {
           const token = response.jwt; // Token JWT de la respuesta
@@ -68,7 +69,7 @@ export class AuthService {
     const token = localStorage.getItem('token'); 
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` 
+      'Authorization': `Bearer ${token}`
     });
   }
 
@@ -87,6 +88,10 @@ export class AuthService {
 
   getRole(): string | null {
     return this.role; // Rol del usuario al loguearse
+  }
+  // Getter público para isLoggedInSubject
+  get isLoggedIn(): boolean {
+    return this.isLoggedInSubject.value;
   }
 
   // Obtener turnos del paciente
@@ -109,7 +114,7 @@ export class AuthService {
   }
 
   // Agregar un nuevo turno y guardarlo en localStorage
-  addTurno(turno: Turno): Observable<Turno | null> { // Cambiado a Observable<Turno | null>
+  addTurno(turno: Turno): Observable<Turno | null> {
     return this.http.post<Turno>(`${this.apiUrl}/asignarTurnoPaciente`, turno).pipe(
       map(nuevoTurno => {
         const userId = turno.id_paciente; // Ajusta según cómo se maneje el ID del usuario
@@ -139,4 +144,24 @@ export class AuthService {
       })
     );
   }
+
 }
+
+
+// ver de agregar esto
+
+// import { Injectable } from '@angular/core';
+// import { HttpClient, HttpHeaders } from '@angular/common/http';
+// import { Observable } from 'rxjs';
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class AuthService {
+//   private apiUrl = 'http://localhost:4000/api/login'; // Asegúrate de que esta URL esté correcta
+
+  // constructor(private http: HttpClient) { }
+  // getUserRole(): string {
+    // Supongamos que el rol se guarda en el localStorage
+  //   return localStorage.getItem('userRole') || 'guest';
+  // }
