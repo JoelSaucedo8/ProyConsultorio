@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
+
 <body>
-    <app-header></app-header>
-    <main>
-        
-    </main>
-    <footer>
-        <app-footer></app-footer>
-    </footer>
+  <div class="auth-buttons">
+    <button class="login" (click)="openLoginDialog()">Iniciar sesión</button>
+    <button class="register" routerLink="/register">Registrarse</button>
+  </div>
+  
+  <header class="header lexend-uniquifier">
+    <div>
+      <p class="logo-title">Bienvenido a</p>
+      <img src="assets/imagenes/logoClinic.PNG" class="logo" (click)="home()" />
+    </div>
+  </header>
+
+  <div class="home-container lexend-uniquifier">
+    <div class="professionals-section">
+      <h3 >Nuestros Profesionales</h3>
+      <div class="professional-card">
+        <img [src]="professionals[currentProfessionalIndex].image" class="professional-image" alt="Imagen del profesional">
+        <div class="professional-info">
+          <p>
+            <strong>
+              {{ professionals[currentProfessionalIndex].name }}  {{ professionals[currentProfessionalIndex].specialty }}.
+            </strong>
+          </p>
+          <p>{{ professionals[currentProfessionalIndex].description }}</p>
+        </div>
+      </div>
+
+      <div class="pagination">
+        <button class="prev" (click)="previousProfessional()">&lt; Previous</button>
+        <button class="page-number">{{ currentProfessionalIndex + 1 }}</button>
+        <button class="next" (click)="nextProfessional()">Next &gt;</button>
+      </div>
+    </div>
+  </div>
 </body>
-</html>

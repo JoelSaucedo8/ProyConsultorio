@@ -1,20 +1,135 @@
-body {
+* {
     margin: 0;
-    height: 100vh; /* Ocupa toda la altura de la ventana */
-    display: flex; /* Utiliza Flexbox para el diseño */
-    flex-direction: column; /* Coloca los elementos en una columna */
-    background-color: #67d46c; /* Color de fondo */
-}
-
-main {
-    flex: 1; /* Toma todo el espacio restante */
-}
-
-footer {
-    background-color: #6EB473; /* Color de fondo del footer */
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #52b176;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Mantiene el contenido alineado al inicio */
+    min-height: 100vh;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     padding: 20px;
+    background-color: transparent; /* Mantener el fondo existente */
+    height: 150px; /* Ajustar el tamaño según lo que necesites */
+    position: relative;
+    margin-top: 50px; /* Espacio adicional para bajar el header */
+  }
+  
+  .logo-title {
+    display: flex;
+    flex-direction: column; /* Colocar el texto "Bienvenido a" sobre el logo */
+    align-items: flex-start; /* Alinear todo a la izquierda */
+    font-size: 25px; /* texto "Bienvenido a" */
+    margin: 0; /* Eliminar márgenes predeterminados */
+    padding-top: 350px; /* Espacio superior para "Bienvenido a" */
+    margin-left: 50px; /* Espacio a la izquierda */
+  }
+  
+  .logo {
+    width: 300px; /* Tamaño del logo */
+    height: auto; /* Mantener proporción */
+    margin-top: 10px; /* Espacio entre el logo y el texto "Bienvenido a" */
+    cursor: pointer;
+    margin-left: 50px; /* Espacio a la izquierda */
+  }
+  
+  .home-container {
+    position: relative;
+    width: 80%;
+    max-width: 1200px;
     text-align: center;
+    margin-top: 100px; /* Agregamos un margen para evitar superposición con los botones */
+  }
+  
+  .auth-buttons {
+    position: fixed; /* Fijo en la parte superior derecha de la ventana */
+    top: 20px; /* Distancia desde la parte superior de la ventana */
+    right: 20px; /* Distancia desde la parte derecha de la ventana */
+    display: flex; /* Los botones se alinean horizontalmente */
+    gap: 10px; /* Espacio entre los botones */
+    z-index: 1000; /* Asegura que los botones estén por encima del contenido */
+  }
+  
+  .auth-buttons button {
+    background-color: #6a9f7a;
     color: white;
-    bottom: 0; /* Posiciona en la parte inferior */
-    width: 100%; /* Ocupa todo el ancho */
-}
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .auth-buttons button:hover {
+    background-color: #4a7c59;
+  }
+  
+  .lilita-one-regular {
+    font-family: "Lilita One", sans-serif;
+  }
+  
+  .lexend-uniquifier {
+    font-family: "Lexend", sans-serif;
+    color: #111010;
+  }
+  
+  .professionals-section {
+    padding: 30px;
+    border-radius: 20px;
+  }
+  
+  h3 {
+    color: #343434;
+    margin-bottom: 20px;
+  }
+  
+  .professional-card {
+    display: flex;
+    width: 600px;
+    margin: 0 auto 20px;
+  }
+  
+  .professional-image {
+    width: 300px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+  
+  .professional-info {
+    padding: 20px;
+    text-align: left;
+    color: #343434;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .prev,
+  .next,
+  .page-number {
+    background-color: #4a7c59;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .prev:hover,
+  .next:hover,
+  .page-number:hover {
+    background-color: #3d654a;
+  }

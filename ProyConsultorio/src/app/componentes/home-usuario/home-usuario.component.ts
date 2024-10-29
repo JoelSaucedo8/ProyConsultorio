@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 interface Turno {
   fecha: Date;
@@ -14,7 +15,10 @@ interface Turno {
   styleUrls: ['./home-usuario.component.css']
 })
 
-export class HomeUsuarioComponent {
+export class HomeUsuarioComponent implements  OnInit{
+  userRole: string = '';
+
+
   // Listado de coberturas, especialidades, profesionales y horas disponibles
   coberturas = ['Cobertura A', 'Cobertura B', 'Cobertura C']; // Ejemplo de coberturas
   especialidades = ['Cardiología', 'Pediatría', 'Dermatología']; // Ejemplo de especialidades
@@ -56,8 +60,16 @@ export class HomeUsuarioComponent {
   // Turno seleccionado para mostrar detalles
   turnoSeleccionado: Turno | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public authService: AuthService) {}
 
+  ngOnInit(): void {
+    this.userRole = this.authService.getUserRole(); // Obtener el rol del usuario
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin(); // Comprobar si es admin
+  }
+  
   // Método para borrar un turno
   borrarTurno(turno: Turno) {
     const confirmacion = confirm('¿Estás seguro de que deseas borrar este turno?');

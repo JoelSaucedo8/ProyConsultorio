@@ -1,18 +1,35 @@
+.footer {
+  display: flex; /* Usa flexbox para el footer */
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan si no caben en una línea */
+  justify-content: space-between; /* Espacio entre los elementos */
+  align-items: center; /* Centra verticalmente los elementos */
+  padding: 10px; /* Espaciado interno */
+  background-color: #3ead5a; /* Color de fondo del footer */
+  font-size: 10px;
+}
 
-  .contact-info {
-    display: flex;
-    justify-content: space-around;
-    background-color: #6EB473;
-    padding: 20px;
-    color: black;
-  }
+.footer p {
+  margin: 0 15px; /* Espacio horizontal entre los párrafos */
+}
 
-  .contact-info div {
-    display: flex;
-    align-items: center;
-  }
+.social-links {
+  display: flex; /* Usa flexbox para alinear los enlaces sociales */
+}
 
-  .contact-info i {
-    margin-right: 10px;
-    font-size: 24px;
-  }
+.social-links a {
+  display: flex; /* Hace que el enlace sea un contenedor flex */
+  align-items: center; /* Centra verticalmente el texto y el icono */
+  margin-left: 10px; /* Espacio entre los enlaces */
+  text-decoration: none; /* Quitar subrayado */
+  color: #212723; /* Color del texto de los enlaces */
+}
+
+.social-icon {
+  width: 24px; /* Ajusta el tamaño del icono (ancho) */
+  height: 24px; /* Ajusta el tamaño del icono (alto) */
+  margin-right: 5px; /* Espacio entre el icono y el texto */
+}
+
+.social-links a:hover {
+  text-decoration: underline; /* Subrayar el enlace al pasar el mouse */
+}
