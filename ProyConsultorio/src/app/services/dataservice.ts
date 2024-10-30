@@ -1,3 +1,5 @@
+// data.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
@@ -19,7 +21,26 @@ export class DataService {
   // Obtener todos los usuarios
   getData(): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtenerUsuarios`)
-      .pipe(catchError(this.handleError)); // agrega manejo de errores
+      .pipe(catchError(this.handleError));
+  }
+
+  // Obtener un turno por ID
+  obtenerTurnoPaciente(id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
+    });
+    return this.http.get<any>(`${this.apiUrl}/obtenerTurnoPaciente/${id}`, { headers })
+      .pipe(catchError(this.handleError));
+  }
+
+  // Asignar un nuevo turno
+  asignarTurnoPaciente(turno: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+    });
+    return this.http.post<any>(`${this.apiUrl}/asignarTurnoPaciente`, turno, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   // Registrar nuevo usuario
@@ -32,31 +53,31 @@ export class DataService {
       .pipe(catchError(this.handleError));
   }
 
-  // Obtener usuario por ID
-  getUsuario(id: string): Observable<any> {
+  // Obtener turnos del usuario
+  getTurnos(usuarioId: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
     });
-    return this.http.get<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, { headers })
-      .pipe(catchError(this.handleError)); 
+    return this.http.get<any>(`${this.apiUrl}/obtenerTurnos/${usuarioId}`, { headers })
+      .pipe(catchError(this.handleError));
   }
 
-  // Actualizar un usuario
-  updateUsuario(id: string, updatedUser: any): Observable<any> {
+  // Crear un nuevo turno
+  crearTurno(turno: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
+      'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
     });
-    return this.http.put<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, updatedUser, { headers })
-      .pipe(catchError(this.handleError)); 
+    return this.http.post<any>(`${this.apiUrl}/crearTurno`, turno, { headers })
+      .pipe(catchError(this.handleError));
   }
 
-  // Eliminar un usuario
-  deleteUsuario(id: string): Observable<any> {
+  // Eliminar un turno
+  borrarTurno(turnoId: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
     });
-    return this.http.delete<any>(`${this.apiUrl}/obtenerUsuarios/${id}`, { headers })
-      .pipe(catchError(this.handleError)); 
+    return this.http.delete<any>(`${this.apiUrl}/borrarTurno/${turnoId}`, { headers })
+      .pipe(catchError(this.handleError));
   }
 }
