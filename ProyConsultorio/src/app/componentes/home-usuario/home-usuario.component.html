@@ -22,22 +22,14 @@
           <!--formulario de solicitud de turno -->
           <div class="form-group">
             <label for="cobertura">Cobertura:</label>
-<<<<<<< HEAD
             <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required>
-=======
-            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required >
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
               <option value="" disabled selected>Selecciona una cobertura</option>
               <option *ngFor="let cobertura of coberturas" [value]="cobertura.nombre">{{ cobertura.nombre }}</option>
             </select>
           </div>
           
 
-<<<<<<< HEAD
           <div class="form-group" *ngIf="turno.cobertura">
-=======
-          <div class="form-group" *ngIf="turno.profesional">
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
             <label for="fecha">Fecha:</label>
             <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required >
           </div>
@@ -56,12 +48,8 @@
           </div>
 
           <div>
-<<<<<<< HEAD
             <!-- agregar click en boton aceptar -->
             <button type="submit" [disabled]="!turnoForm.valid" (click)="agregarTurno()" class="btn-aceptar">Aceptar</button>
-=======
-            <button type="submit" (click)="crearTurnos()" [disabled]="!turnoForm.valid" class="btn-aceptar">Aceptar</button>
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
             <button type="button" (click)="cancelar()" class="btn-cancelar">Cancelar</button>
           </div>
         </form>
@@ -94,10 +82,4 @@
     <!-- Footer -->
     <footer class="footer"></footer>
   </div>
-<<<<<<< HEAD
 </body>
-=======
-</body>
-
-<!-- <div *ngFor="rol=== roluser"> -->
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef

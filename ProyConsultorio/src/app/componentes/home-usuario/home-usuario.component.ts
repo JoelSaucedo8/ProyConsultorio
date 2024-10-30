@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Turno } from 'src/app/interfaces/home-usuario.interface';
 import { DataService } from 'src/app/services/dataservice'; 
-<<<<<<< HEAD
 import { TurnoService } from 'src/app/services/turno.service';
 import { EspecialidadService } from 'src/app/services/especialidad.service';
-=======
-import { AuthService } from 'src/app/services/auth.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { TurnoService } from 'src/app/services/turno.service';
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
 
 @Component({
   selector: 'app-home-usuarios',
@@ -28,7 +22,6 @@ export class HomeUsuariosComponent implements OnInit {
   popupVisible = false;
   turnos: Turno[] = [];
   turnoSeleccionado: Turno | null = null;
-<<<<<<< HEAD
   coberturas: any;
   especialidades: any[] = []; 
   horasDisponibles: any;
@@ -39,26 +32,6 @@ export class HomeUsuariosComponent implements OnInit {
     private turnoService: TurnoService,
     private especialidadService: EspecialidadService, //  se inyecta el servicio de especialidades
   ) {}
-=======
-userName: any;
-event: KeyboardEvent | undefined;
-turnoForm: FormGroup;
-id: any= localStorage.getItem('id');
-
-constructor(private router: Router, private dataService: DataService, private authService: AuthService, 
-  private formbuilder:FormBuilder, private turnoservice:TurnoService) 
-{
-  this.turnoForm = this.formbuilder.group
-({
-  agenda: '',
-  cobertura: '',
-  fecha: '',
-  hora: '',
-  notas: '',
-
-})
-}
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
 
   ngOnInit() {
     // this.cargarTurnos(); 
@@ -89,7 +62,7 @@ constructor(private router: Router, private dataService: DataService, private au
           this.coberturas = data; 
           console.log('Coberturas cargadas:', this.coberturas);
         } else {
-          console.error('Se recibió un objeto:', data);  
+          console.error('Se recibió un objeto', data);  
           this.coberturas = []; 
         }
       }
@@ -104,7 +77,7 @@ constructor(private router: Router, private dataService: DataService, private au
           this.especialidades = data; 
           console.log('Especialidades cargadas:', this.especialidades);
         } else {
-          console.error('Se recibió un objeto:', data); 
+          console.error('Se recibió un objeto :', data); 
           this.especialidades = []; 
         }
       }
@@ -127,75 +100,7 @@ constructor(private router: Router, private dataService: DataService, private au
       });
     }
   }
-  
-  crearTurnos(){ 
-    let body = {
-      nota:this.turnoForm.controls['notas'].value , 
-      id_agenda: this.turnoForm.controls['agenda'].value,
-      fecha:this.turnoForm.controls['fecha'].value,
-      hora: this.turnoForm.controls['hora'].value,
-      id_paciente: this.id,
-      id_cobertura: this.turnoForm.controls['cobertura'].value} 
-    this.turnoservice.addTurno(body).subscribe((data:any)=> {
-      console.log(data)
-    })
-  }
 
-<<<<<<< HEAD
-=======
-  // cambios en la cobertura
-  onCoberturaChange() {
-    // especialidades en la cobertura seleccionada
-  }
-
-  // cambios en la especialidad
-  onEspecialidadChange() {
-    // profesionales basados en la especialidad seleccionada
-  }
-
-  onEnter(event: KeyboardEvent) {
-    event.preventDefault();
-    // agregar lógica adicional si deseas hacer algo específico al presionar Enter
-  }
-  
-  // cambios en la fecha
-  onFechaChange() {
-    // horas disponibles en la fecha seleccionada
-  }
-  // se ejecuta al enviar el formulario de turno
-  // onSubmit() {
-  //   if (this.turno.cobertura && this.turno.especialidad && this.turno.profesional && this.turno.fecha && this.turno.hora && this.turno.notas) {
-  //     const nuevoTurno: Turno = {
-  //       fecha: new Date(this.turno.fecha),
-  //       hora: this.turno.hora,
-  //       profesional: this.turno.profesional,
-  //       especialidad: this.turno.especialidad,
-  //       notas: this.turno.notas,
-  //       id: '',
-  //       id_paciente: '',
-  //     };
-
-  //     this.turnos.push(nuevoTurno);
-
-  //     this.turno = {
-  //       cobertura: '',
-  //       especialidad: '',
-  //       profesional: '',
-  //       fecha: '',
-  //       hora: '',
-  //       notas: '',
-  //     };
-
-  //     this.popupVisible = false;
-
-  //     alert('Turno agregado con éxito');
-  //   } else {
-  //     alert('Por favor, complete todos los campos antes de enviar el formulario.');
-  //   }
-  // }
-
-  // cancela y vuelve a la pantalla principal
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
   cancelar() {
     this.router.navigate(['/']);
   }

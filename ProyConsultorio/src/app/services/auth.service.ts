@@ -14,11 +14,7 @@ export class AuthService {
   private userName: string | null = null; // Almacena nombre de usuario logueado
   private role: string | null = null; // Almacena rol de usuario
   currentRoleSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-<<<<<<< HEAD
   getUserRole: any;
-=======
-  getUserId: any;
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
 
   constructor(private http: HttpClient) {}
 
@@ -44,33 +40,8 @@ export class AuthService {
   }
 
   // Iniciar sesión
-<<<<<<< HEAD
   login(body: any): Observable<any> {
     return this.http.post(this.apiUrl + '/login', body);
-=======
-  login(usuario: string, password: string): Observable<boolean> {
-    console.log(`Intentando iniciar sesión con usuario: ${usuario} y contraseña: ${password}`);
-    return this.http.post<{ codigo: number, mensaje: string, payload: any, jwt: string }>(`${this.apiUrl}/login`, { usuario, password }).pipe(
-      map(response => {
-        if (response.codigo === 200) {
-          const token = response.jwt; // Token JWT de la respuesta
-          localStorage.setItem('token', token); // Almacena el token en localStorage
-          const user = response.payload[0]; // Asegúrate de que estás accediendo al primer elemento del payload
-          this.userName = user.nombre; // Almacena nombre de usuario
-          this.role = user.rol; // Almacena rol de usuario
-          this.currentRoleSubject.next(this.role); // Rol actual
-          this.isLoggedInSubject.next(true); // Actualiza el estado de inicio de sesión
-          return true; // Login exitoso
-        } else {
-          return false; // Login fallido
-        }
-      }),
-      catchError(err => {
-        console.error('Error en el login:', err);
-        return of(false); 
-      })
-    );
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
   }
 
   // Obtiene las cabeceras con el token
@@ -78,11 +49,7 @@ export class AuthService {
     const token = localStorage.getItem('token'); 
     return new HttpHeaders({
       'Content-Type': 'application/json',
-<<<<<<< HEAD
       'Authorization': `${token}` 
-=======
-      'Authorization': `Bearer ${token}`
->>>>>>> 0520af96382c6aa0bdf6ed7fc66375b3fecc30ef
     });
   }
 
