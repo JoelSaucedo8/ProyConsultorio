@@ -14,6 +14,7 @@ export class AuthService {
   private userName: string | null = null; // almacena nombre de usuario logueado
   private role: string | null = null; // almacena rol de usuario
   currentRoleSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  getUserRole: any;
 
   constructor(private http: HttpClient) {}
 
@@ -39,28 +40,8 @@ export class AuthService {
   }
 
   // Iniciar sesión
-  login(usuario: string, password: string): Observable<boolean> {
-    console.log(`Intentando iniciar sesión con usuario: ${usuario} y contraseña: ${password}`);
-    return this.http.post<{ codigo: number, mensaje: string, payload: any, jwt: string }>(this.apiUrl + '/login', { usuario, password }).pipe(
-      map(response => {
-        if (response.codigo === 200) {
-          const token = response.jwt; // Token JWT de la respuesta
-          localStorage.setItem('token', token); // Almacena el token en localStorage
-          const user = response.payload[0]; // Asegúrate de que estás accediendo al primer elemento del payload
-          this.userName = user.nombre; // Almacena nombre de usuario
-          this.role = user.rol; // Almacena rol de usuario
-          this.currentRoleSubject.next(this.role); // Rol actual
-          this.isLoggedInSubject.next(true); // Actualiza el estado de inicio de sesión
-          return true; // Login exitoso
-        } else {
-          return false; // Login fallido
-        }
-      }),
-      catchError(err => {
-        console.error('Error en el login:', err);
-        return of(false); 
-      })
-    );
+  login(body: any): Observable<any> {
+    return this.http.post(this.apiUrl + '/login', body);
   }
 
   // Obtiene las cabeceras con el token
@@ -68,7 +49,7 @@ export class AuthService {
     const token = localStorage.getItem('token'); 
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` 
+      'Authorization': `${token}` 
     });
   }
 
@@ -109,7 +90,7 @@ export class AuthService {
   }
 
   // Agregar un nuevo turno y guardarlo en localStorage
-  addTurno(turno: Turno): Observable<Turno | null> { // Cambiado a Observable<Turno | null>
+  addTurno(turno: Turno): Observable<Turno | null> {
     return this.http.post<Turno>(`${this.apiUrl}/asignarTurnoPaciente`, turno).pipe(
       map(nuevoTurno => {
         const userId = turno.id_paciente; // Ajusta según cómo se maneje el ID del usuario
@@ -124,7 +105,7 @@ export class AuthService {
       })
     );
   }
-  
+
   // Borrar un turno de localStorage y del backend
   deleteTurno(turnoId: string, userId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/eliminarTurnoPaciente/${turnoId}`).pipe(

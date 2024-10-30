@@ -164,4 +164,20 @@ html, body {
     flex-direction: column; 
     align-items: center; 
   }
+
+}
+
+.btn-cerrarsesion {
+  background-color: #29b664;
+  color: white;
+  padding: 10px 20px;
+  border: bold;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.font {
+  margin-right: 10px; 
 }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Turno } from 'src/app/interfaces/home-usuario.interface';
 import { DataService } from 'src/app/services/dataservice'; 
+import { TurnoService } from 'src/app/services/turno.service';
+import { EspecialidadService } from 'src/app/services/especialidad.service';
 
 @Component({
   selector: 'app-home-usuarios',
@@ -9,113 +11,110 @@ import { DataService } from 'src/app/services/dataservice';
   styleUrls: ['./home-usuario.component.css']
 })
 export class HomeUsuariosComponent implements OnInit {
-  // lista
-  coberturas = ['Cobertura A', 'Cobertura B', 'Cobertura C'];
-  especialidades = ['Cardiología', 'Pediatría', 'Dermatología'];
-  profesionales = ['Dr. Juan Pérez', 'Dr. Ana Lopez', 'Dra. María González'];
-  horasDisponibles = ['09:00', '10:00', '11:00', '14:00', '15:00'];
-
-  // formulario de solicitud de turno
-  turno = {
+  turno: Turno = {
+    id_paciente: '', 
     cobertura: '',
-    especialidad: '',
-    profesional: '',
-    fecha: '',
+    fecha: new Date(), 
     hora: '',
     notas: '',
   };
-
-  // popup de confirmacion
+  
   popupVisible = false;
-  turnos: Turno[] = []; // array vacío
-
+  turnos: Turno[] = [];
   turnoSeleccionado: Turno | null = null;
-userName: any;
+  coberturas: any;
+  especialidades: any[] = []; 
+  horasDisponibles: any;
 
-  constructor(private router: Router, private dataService: DataService) {}
+  constructor(
+    private router: Router, 
+    private dataService: DataService, 
+    private turnoService: TurnoService,
+    private especialidadService: EspecialidadService, //  se inyecta el servicio de especialidades
+  ) {}
 
   ngOnInit() {
-    this.cargarTurnos(); // carga el turno al iniciar el componente
+    // this.cargarTurnos(); 
+    this.cargarCoberturas(); 
+    this.cargarEspecialidades();
   }
 
-  // cargar los turnos desde el backend
   cargarTurnos() {
-    this.dataService.getData().subscribe({
-      next: (data) => {
-        // acceder a la propiedad correcta que contiene el array de turnos
-        this.turnos = data.turnos || []; // Usar un array vacío como fallback
-      },
-      error: (err) => {
-        console.error('Error al cargar los turnos', err);
-      }
-    });
+    const userId = localStorage.getItem('userId'); 
+    if (userId) {
+      this.turnoService.getTurnos(userId).subscribe({
+        next: (data) => {
+          this.turnos = data; // se asigna a los turnos obtenidos
+        },
+        error: (err) => {
+          console.error('Error al cargar los turnos', err);
+        }
+      });
+    } else {
+      console.error('User ID no disponible');  
+    }
   }
-    
-  // borrar un turno
+
+  cargarCoberturas() {
+    this.especialidadService.obtenerCoberturas().subscribe((data:any) => {
+      console.log(data)
+        if (data.codigo === 200) {
+          this.coberturas = data; 
+          console.log('Coberturas cargadas:', this.coberturas);
+        } else {
+          console.error('Se recibió un objeto:', data);  
+          this.coberturas = []; 
+        }
+      }
+      // error: (err) => {
+      //   console.error('Error al cargar las coberturas', err);
+      );
+    }
+  
+  cargarEspecialidades() {
+    this.especialidadService.obtenerEspecialidades().subscribe((data:any) =>{
+        if (data) {
+          this.especialidades = data; 
+          console.log('Especialidades cargadas:', this.especialidades);
+        } else {
+          console.error('Se recibió un objeto:', data); 
+          this.especialidades = []; 
+        }
+      }
+      // error: (err) => {
+      //   console.error('Error al cargar especialidades', err);
+    );
+  }
+
   borrarTurno(turno: Turno) {
     const confirmacion = confirm('¿Estás seguro de que deseas borrar este turno?');
     if (confirmacion) {
-      this.turnos = this.turnos.filter(t => t !== turno);
-      // acá se puede agregar una llamada al servicio para borrar el turno en el backend
+      this.turnoService.deleteTurno(turno.id!).subscribe({
+        next: () => {
+          this.turnos = this.turnos.filter(t => t !== turno);
+          alert('Turno borrado con éxito');
+        },
+        error: (error) => {
+          console.error('Error al borrar el turno:', error);
+        }
+      });
     }
   }
 
-  // cambios en la cobertura
-  onCoberturaChange() {
-    // especialidades en la cobertura seleccionada
-  }
-
-  // cambios en la especialidad
-  onEspecialidadChange() {
-    // profesionales basados en la especialidad seleccionada
-  }
-
-  // cambios en la fecha
-  onFechaChange() {
-    // horas disponibles en la fecha seleccionada
-  }
-  // se ejecuta al enviar el formulario de turno
-  onSubmit() {
-    if (this.turno.cobertura && this.turno.especialidad && this.turno.profesional && this.turno.fecha && this.turno.hora && this.turno.notas) {
-      const nuevoTurno: Turno = {
-        fecha: new Date(this.turno.fecha),
-        hora: this.turno.hora,
-        profesional: this.turno.profesional,
-        especialidad: this.turno.especialidad,
-        notas: this.turno.notas,
-        id: '',
-        id_paciente: undefined
-      };
-
-      this.turnos.push(nuevoTurno);
-
-      this.turno = {
-        cobertura: '',
-        especialidad: '',
-        profesional: '',
-        fecha: '',
-        hora: '',
-        notas: '',
-      };
-
-      this.popupVisible = false;
-
-      alert('Turno agregado con éxito');
-    } else {
-      alert('Por favor, complete todos los campos antes de enviar el formulario.');
-    }
-  }
-
-  // cancela y vuelve a la pantalla principal
   cancelar() {
     this.router.navigate(['/']);
   }
 
-  // popup de confirmacion
   cerrarPopup() {
     this.popupVisible = false;
   }
 
+  cerrarsesion() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId'); 
+    this.router.navigate(['/login']);
+  }
+  
   mostrarDetalles(turno: Turno) {
     this.turnoSeleccionado = turno;
   }
@@ -124,17 +123,50 @@ userName: any;
     this.turnoSeleccionado = null; 
   }
 
-  // vuelve pag principal
   home(): void {
     this.router.navigate(['/']);
   }
 
-  // fecha en español
   formatearFecha(fecha: Date): string {
     return fecha.toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+  }
+
+  onCoberturaChange() {
+    // manejar el cambio de cobertura
+  }
+
+  onEspecialidadChange() {
+    // manejar el cambio de especialidad
+  }
+
+  onFechaChange() {
+    // manejar el cambio de fecha
+  }
+
+  agregarTurno() {
+    this.turnoService.addTurno(this.turno).subscribe({
+      next: () => {
+        alert('Turno agregado con éxito');
+        this.cargarTurnos();
+        this.cerrarPopup(); 
+      },
+      error: (error: any) => {
+        console.error('Error al agregar el turno:', error);
+      }
+    });
+  }
+
+  resetTurno() {
+    this.turno = {
+      id_paciente: '',
+      cobertura: '',
+      fecha: new Date(),
+      hora: '',
+      notas: '',
+    };
   }
 }

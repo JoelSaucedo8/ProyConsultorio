@@ -18,35 +18,20 @@
     <div class="content-area">
       <div class="form-container">
         <h3>Solicitar Turno</h3>
-        <form (ngSubmit)="onSubmit()" #turnoForm="ngForm">
+        <form #turnoForm="ngForm">
           <!--formulario de solicitud de turno -->
           <div class="form-group">
             <label for="cobertura">Cobertura:</label>
-            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required (change)="onCoberturaChange()">
+            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required>
               <option value="" disabled selected>Selecciona una cobertura</option>
-              <option *ngFor="let cobertura of coberturas" [value]="cobertura">{{ cobertura }}</option>
+              <option *ngFor="let cobertura of coberturas" [value]="cobertura.nombre">{{ cobertura.nombre }}</option>
             </select>
           </div>
+          
 
           <div class="form-group" *ngIf="turno.cobertura">
-            <label for="especialidad">Especialidad:</label>
-            <select id="especialidad" [(ngModel)]="turno.especialidad" name="especialidad" required (change)="onEspecialidadChange()">
-              <option value="" disabled selected>Selecciona una especialidad</option>
-              <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
-            </select>
-          </div>
-
-          <div class="form-group" *ngIf="turno.especialidad">
-            <label for="profesional">Profesional:</label>
-            <select id="profesional" [(ngModel)]="turno.profesional" name="profesional" required>
-              <option value="" disabled selected>Selecciona un profesional</option>
-              <option *ngFor="let profesional of profesionales" [value]="profesional">{{ profesional }}</option>
-            </select>
-          </div>
-
-          <div class="form-group" *ngIf="turno.profesional">
             <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required (change)="onFechaChange()">
+            <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required >
           </div>
 
           <div class="form-group" *ngIf="turno.fecha">
@@ -63,7 +48,8 @@
           </div>
 
           <div>
-            <button type="submit" [disabled]="!turnoForm.valid" class="btn-aceptar">Aceptar</button>
+            <!-- agregar click en boton aceptar -->
+            <button type="submit" [disabled]="!turnoForm.valid" (click)="agregarTurno()" class="btn-aceptar">Aceptar</button>
             <button type="button" (click)="cancelar()" class="btn-cancelar">Cancelar</button>
           </div>
         </form>
@@ -73,21 +59,20 @@
         <h3>Mis Turnos</h3>
         <div class="turnos-list">
           <div *ngFor="let turno of turnos" class="turno" (click)="mostrarDetalles(turno)">
-            <strong>Fecha:</strong> {{ formatearFecha(turno.fecha) }}<br />
-            <strong>Hora:</strong> {{ turno.hora }}<br />
-            <strong>Profesional:</strong> {{ turno.profesional }}<br />
-            <strong>Especialidad:</strong> {{ turno.especialidad }}<br />
+            <strong>Cobertura:</strong>{{turno.cobertura}}<br />
+            <strong>Fecha:</strong> {{formatearFecha(turno.fecha) }}<br />
+            <strong>Hora:</strong> {{turno.hora }}<br />
             <strong>Notas:</strong> {{turno.notas}}<br />
             <button (click)="borrarTurno(turno)">Borrar</button>
           </div>
         </div>
              
         <div *ngIf="turnoSeleccionado" class="detalles-turno">
+          <!-- modificar tamaño de mostrar detalle -->
           <h4>Detalles del Turno</h4>
+          <p>Cobertura: {{ turnoSeleccionado.cobertura }}</p>
           <p>Fecha: {{ formatearFecha(turnoSeleccionado.fecha) }}</p>
           <p>Hora: {{ turnoSeleccionado.hora }}</p>
-          <p>Profesional: {{ turnoSeleccionado.profesional }}</p>
-          <p>Especialidad: {{ turnoSeleccionado.especialidad }}</p>
           <p>Notas: {{ turnoSeleccionado.notas }}</p>
           <button (click)="cerrarDetalles()">Cerrar</button>
         </div>

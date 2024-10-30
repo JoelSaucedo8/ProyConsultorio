@@ -11,26 +11,28 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   documento: string = ''; 
   password: string = ''; 
-
+  
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
     private authService: AuthService,
     private router: Router
   ) {}
 
-  iniciar(): void {
-    console.log('Intentando iniciar sesión...');
-    this.authService.login(this.documento, this.password).subscribe(success => {
-      if (success) {
-        this.router.navigate(['/home-usuario']); // lleva a home-usuario
-        this.close();
-      } else {
-        console.error('Error en las credenciales'); // Manejo de error
-      }
-    });
+  iniciar(){
+    const user = {
+      usuario: this.documento,
+      password: this.password
+    }
+      console.log(user)
+    this.authService.login(user).subscribe((data:any)=>{
+      console.log(data)
+      this.dialogRef.close()
+      localStorage.setItem('token', data.jwt)
+      this.router.navigate(['/home-usuario']);
+    })
   }
 
-  close(): void {
+  cerrar(): void {
     this.dialogRef.close(); 
   }
 }

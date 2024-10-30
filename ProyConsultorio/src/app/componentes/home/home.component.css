@@ -59,9 +59,9 @@ body {
 }
 
 .auth-buttons button {
-  background-color: #6a9f7a;
+  background-color: #3f885e;
   color: white;
-  border: none;
+  border: bold;
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
@@ -121,7 +121,7 @@ h3 {
 .page-number {
   background-color: #4a7c59;
   color: white;
-  border: none;
+  border: bold;
   border-radius: 5px;
   padding: 8px 15px;
   margin: 0 5px;
