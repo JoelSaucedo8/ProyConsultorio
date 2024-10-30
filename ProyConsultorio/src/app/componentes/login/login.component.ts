@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service'; // Importar el servicio de autenticación
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,35 +15,28 @@ export class LoginComponent {
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>, 
     private router: Router,
-    private authService: AuthService // Inyectar el servicio de autenticación
+    private authService: AuthService
   ) {}
 
-  async login(): Promise<void> { 
-    try {
-        console.log("Datos de login:", { usuario: this.usuario, password: this.password });
-
-        // Llamada al servicio de autenticación
-        this.authService.login(this.usuario, this.password).subscribe(
-          (data) => {
-            if (data.codigo === 200) {
-              alert('Inicio de sesión exitoso');
-              console.log("Datos del usuario:", data.payload);
-              this.router.navigate(['/home-usuario']);
-              this.close();
-            } else {
-              const errorMessage = data.mensaje || 'Error desconocido';
-              alert('Error: ' + errorMessage);
-            }
-          },
-          (error) => {
-            console.error('Error en la solicitud de inicio de sesión:', error);
-            alert('Error en la solicitud de inicio de sesión');
-          }
-        );
-    } catch (error) {
-        console.error('Error en el proceso de inicio de sesión:', error);
-    }
-  }
+  iniciar(): void {
+    console.log('Intentando iniciar sesión...');
+    this.authService.login(this.usuario, this.password).subscribe(response => {
+        console.log('Respuesta del servidor:', response); // Agrega un log para ver la respuesta completa
+        if (response.codigo === 200) { // Verifica el código de respuesta
+            // Si el código es 200, significa que el inicio de sesión fue exitoso
+            console.log('Inicio de sesión exitoso:', response);
+            // Aquí puedes obtener otras propiedades de la respuesta, si las hay
+            this.router.navigate(['/home-usuario']);
+            this.close();
+        } else {
+            console.error('Error en las credenciales:', response.mensaje); // Manejo de error
+        }
+    }, error => {
+        console.error('Error en la solicitud de inicio de sesión:', error);
+        alert('Error en la solicitud de inicio de sesión');
+    });
+}
+  
 
   close(): void {
     this.dialogRef.close();
