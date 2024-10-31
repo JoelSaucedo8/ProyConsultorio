@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 const API_URL = 'http://localhost:4000/api'; 
 
@@ -28,14 +28,17 @@ export class EspecialidadService {
   }
 
   // Obtener coberturas
-  obtenerCoberturas(){  
-
-    return this.http.get(`${API_URL}/obtenerCoberturas`, {
-      headers: {
-        'Authorization': '' + localStorage.getItem('token')
-      }
-    });
-    
+  obtenerCoberturas(): Observable<any[]> {
+    return this.http.get<any>(`${API_URL}/obtenerCoberturas`, this.obtenerConfigToken()).pipe(
+      map(response => {
+        if (response.codigo === 200) {
+          console.log('Respuesta de obtenerCoberturas:', response);
+          return response.payload; 
+        } else {
+          throw new Error('Error al obtener coberturas: ' + response.mensaje);
+        }
+      })
+    );
   }
 
   // Obtener especialidades de médico

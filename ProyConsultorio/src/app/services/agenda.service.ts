@@ -34,6 +34,16 @@ export class AgendaService {
       );
   }
 
+  // private obtenerConfigToken() {
+  //   const token = localStorage.getItem('token');
+  //   return {
+  //     headers: new HttpHeaders({
+  //       'Authorization': token || '',
+  //       'Content-Type': 'application/json'
+  //     })
+  //   };
+  // }
+
   // crear una nueva agenda 
   crearAgenda(idMedico: number, idEspecialidad: number, fecha: string, horaEntrada: string, horaSalida: string): Observable<any> {
     const body = {

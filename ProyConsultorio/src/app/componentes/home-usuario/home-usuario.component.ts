@@ -4,6 +4,8 @@ import { Turno } from 'src/app/interfaces/home-usuario.interface';
 import { DataService } from 'src/app/services/dataservice'; 
 import { TurnoService } from 'src/app/services/turno.service';
 import { EspecialidadService } from 'src/app/services/especialidad.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { AgendaService } from 'src/app/services/agenda.service';
 
 @Component({
   selector: 'app-home-usuarios',
@@ -22,21 +24,29 @@ export class HomeUsuariosComponent implements OnInit {
   popupVisible = false;
   turnos: Turno[] = [];
   turnoSeleccionado: Turno | null = null;
-  coberturas: any;
+  coberturas: any; 
   especialidades: any[] = []; 
   horasDisponibles: any;
+
+  // Nueva propiedad para usuario y agenda
+  usuarioActual: any;
+  agenda: any;
 
   constructor(
     private router: Router, 
     private dataService: DataService, 
     private turnoService: TurnoService,
-    private especialidadService: EspecialidadService, //  se inyecta el servicio de especialidades
+    private especialidadService: EspecialidadService,
+    private usuarioService: UsuarioService,
+    private agendaService: AgendaService // Inyecta el servicio de agenda
   ) {}
 
   ngOnInit() {
     // this.cargarTurnos(); 
     this.cargarCoberturas(); 
     this.cargarEspecialidades();
+    this.obtenerUsuarioActual(); 
+    this.obtenerAgendaMedico(); 
   }
 
   cargarTurnos() {
@@ -56,34 +66,65 @@ export class HomeUsuariosComponent implements OnInit {
   }
 
   cargarCoberturas() {
-    this.especialidadService.obtenerCoberturas().subscribe((data:any) => {
-      console.log(data)
-        if (data.codigo === 200) {
-          this.coberturas = data; 
-          console.log('Coberturas cargadas:', this.coberturas);
-        } else {
-          console.error('Se recibió un objeto', data);  
-          this.coberturas = []; 
-        }
+    this.especialidadService.obtenerCoberturas().subscribe({
+      next: coberturas => {
+        this.coberturas = coberturas;
+      },
+      error: err => {
+        console.error('Error al cargar coberturas:', err.message);
       }
-      // error: (err) => {
-      //   console.error('Error al cargar las coberturas', err);
-      );
-    }
+    });
+  }
   
   cargarEspecialidades() {
-    this.especialidadService.obtenerEspecialidades().subscribe((data:any) =>{
-        if (data) {
-          this.especialidades = data; 
-          console.log('Especialidades cargadas:', this.especialidades);
-        } else {
-          console.error('Se recibió un objeto :', data); 
-          this.especialidades = []; 
-        }
+    this.especialidadService.obtenerEspecialidades().subscribe((data: any) => {
+      if (data) {
+        this.especialidades = data; 
+        console.log('Especialidades cargadas:', this.especialidades);
+      } else {
+        console.error('Se recibió un objeto :', data); 
+        this.especialidades = []; 
       }
-      // error: (err) => {
-      //   console.error('Error al cargar especialidades', err);
-    );
+    });
+  }
+
+  obtenerUsuarioActual() {
+    const userIdString = localStorage.getItem('userId');
+    if (userIdString) {
+      const userId = Number(userIdString); 
+      this.usuarioService.obtenerUsuario(userId).subscribe({
+        next: (data) => {
+          if (data.codigo === 200) {
+            this.usuarioActual = data.payload[0]; 
+            console.log('Usuario actual:', this.usuarioActual);
+          } else {
+            console.error('Error al obtener usuario:', data.mensaje);
+          }
+        },
+        error: (err) => {
+          console.error('Error al cargar el usuario actual', err);
+        }
+      });
+    } else {
+      console.error('User ID no disponible');
+    }
+  }
+  
+  obtenerAgendaMedico() {
+    const idMedico = this.usuarioActual?.id; // Asumiendo que tienes el ID del médico
+    if (idMedico) {
+      this.agendaService.obtenerAgenda(idMedico).subscribe({
+        next: (data) => {
+          this.agenda = data; // Guarda la agenda
+          console.log('Agenda cargada:', this.agenda);
+        },
+        error: (err) => {
+          console.error('Error al cargar la agenda:', err);
+        }
+      });
+    } else {
+      console.error('ID de médico no disponible');
+    }
   }
 
   borrarTurno(turno: Turno) {
