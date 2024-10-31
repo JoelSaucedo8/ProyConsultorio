@@ -28,6 +28,7 @@ export class LoginComponent {
       console.log(data)
       this.dialogRef.close()
       localStorage.setItem('token', data.jwt)
+      localStorage.setItem('userId',data.payload[0].id)
       this.router.navigate(['/home-usuario']);
     })
   }

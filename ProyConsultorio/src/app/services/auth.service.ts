@@ -7,44 +7,44 @@ import { Turno } from '../interfaces/home-usuario.interface';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:4000/api'; // URL base del backend
+  private apiUrl = 'http://localhost:4000/api';
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  private userName: string | null = null; // Almacena nombre de usuario logueado
-  private role: string | null = null; // Almacena rol de usuario
+  private userName: string | null = null; // almacena nombre de usuario logueado
+  private role: string | null = null; // almacena rol de usuario
   currentRoleSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   getUserRole: any;
 
   constructor(private http: HttpClient) {}
 
-  // Método para registrar un nuevo usuario
+  // registra un nuevo usuario
   register(userData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/crearUsuario`, userData).pipe(
       map(response => {
-        // Verifica si la respuesta es exitosa
+        // verifica si la respuesta es exitosa
         if (response && response.codigo === 200) {
-          const user = response.payload[0]; // Accede a la información del usuario
-          this.userName = user.nombre; // Almacena el nombre de usuario
-          this.role = user.rol; // Almacena el rol del usuario
-          this.currentRoleSubject.next(this.role); // Actualiza el rol actual
-          this.isLoggedInSubject.next(true); // Actualiza el estado de inicio de sesión
+          const user = response.payload[0]; // accede a la info del usuario
+          this.userName = user.nombre; // almacena nombre de usuario
+          this.role = user.rol; // almacena rol del usuario
+          this.currentRoleSubject.next(this.role); // actualiza  rol actual
+          this.isLoggedInSubject.next(true); // actualiza estado de inicio de sesión
         }
-        return response; // Devuelve la respuesta
+        return response; 
       }),
       catchError(err => {
         console.error('Error en el registro:', err);
-        return of(null); // Maneja errores
+        return of(null); // maneja errores
       })
     );
   }
 
-  // Iniciar sesión
+  // inicio sesion
   login(body: any): Observable<any> {
     return this.http.post(this.apiUrl + '/login', body);
   }
 
-  // Obtiene las cabeceras con el token
+  // obtiene las cabeceras con el token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token'); 
     return new HttpHeaders({
@@ -53,28 +53,28 @@ export class AuthService {
     });
   }
 
-  // Cerrar sesión
+  // cerrar sesion
   logout(): void {
     this.isLoggedInSubject.next(false);
-    this.userName = null; // Elimina nombre de usuario
-    this.role = null; // Elimina rol al iniciar sesión
-    this.currentRoleSubject.next(null); // Elimina rol actual
-    localStorage.removeItem('token'); // Elimina token de localStorage
+    this.userName = null; // elimina nombre de usuario
+    this.role = null; // elimina rol al iniciar sesion
+    this.currentRoleSubject.next(null); // elimina rol actual
+    localStorage.removeItem('token'); // elimina token de localStorage
   }
 
   getUserName(): string | null {
-    return this.userName; // Usuario logueado
+    return this.userName; // usuario logueado
   }
 
   getRole(): string | null {
-    return this.role; // Rol del usuario al loguearse
+    return this.role; // rol del usuario logueado
   }
-  // Getter público para isLoggedInSubject
+  // getter publico para isLoggedInSubject
   get isLoggedIn(): boolean {
     return this.isLoggedInSubject.value;
   }
 
-  // Obtener turnos del paciente
+  // obtiene turnos del paciente
   getTurnos(userId: string): Observable<Turno[]> {
     const turnosGuardados = localStorage.getItem(`turnos_${userId}`);
     if (turnosGuardados) {
@@ -93,11 +93,11 @@ export class AuthService {
     }
   }
 
-  // Agregar un nuevo turno y guardarlo en localStorage
+  // agrega nuevo turno y lo guarda en localStorage
   addTurno(turno: Turno): Observable<Turno | null> {
     return this.http.post<Turno>(`${this.apiUrl}/asignarTurnoPaciente`, turno).pipe(
       map(nuevoTurno => {
-        const userId = turno.id_paciente; // Ajusta según cómo se maneje el ID del usuario
+        const userId = turno.id_paciente; 
         const turnos = JSON.parse(localStorage.getItem(`turnos_${userId}`) || '[]');
         turnos.push(nuevoTurno);
         localStorage.setItem(`turnos_${userId}`, JSON.stringify(turnos));
@@ -105,12 +105,12 @@ export class AuthService {
       }),
       catchError((error) => {
         console.error('Error al asignar turno:', error);
-        return of(null); // Devuelve null en caso de error
+        return of(null); // devuelve null en caso de error
       })
     );
   }
 
-  // Borrar un turno de localStorage y del backend
+  // borra turno de localStorage y del backend
   deleteTurno(turnoId: string, userId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/eliminarTurnoPaciente/${turnoId}`).pipe(
       map(() => {
@@ -128,20 +128,4 @@ export class AuthService {
 }
 
 
-// ver de agregar esto
 
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { Observable } from 'rxjs';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class AuthService {
-//   private apiUrl = 'http://localhost:4000/api/login'; // Asegúrate de que esta URL esté correcta
-
-  // constructor(private http: HttpClient) { }
-  // getUserRole(): string {
-    // Supongamos que el rol se guarda en el localStorage
-  //   return localStorage.getItem('userRole') || 'guest';
-  // }

@@ -18,17 +18,25 @@ export class HomeUsuariosComponent implements OnInit {
     cobertura: '',
     fecha: new Date(), 
     hora: '',
+    profesional: '',
+    especialidad: '',
     notas: '',
+    agenda: '',
   };
   
   popupVisible = false;
   turnos: Turno[] = [];
   turnoSeleccionado: Turno | null = null;
   coberturas: any; 
-  especialidades: any[] = []; 
+  profesionales: any;
+  especialidades: any; 
+  agendas: any;
   horasDisponibles: any;
+  usuarios: any;
+  medicos: any;
+  turnoespecialidad:any;
 
-  // Nueva propiedad para usuario y agenda
+  // Propiedades para usuario y agenda
   usuarioActual: any;
   agenda: any;
 
@@ -38,15 +46,13 @@ export class HomeUsuariosComponent implements OnInit {
     private turnoService: TurnoService,
     private especialidadService: EspecialidadService,
     private usuarioService: UsuarioService,
-    private agendaService: AgendaService // Inyecta el servicio de agenda
+    private agendaService: AgendaService 
   ) {}
 
   ngOnInit() {
-    // this.cargarTurnos(); 
     this.cargarCoberturas(); 
     this.cargarEspecialidades();
     this.obtenerUsuarioActual(); 
-    this.obtenerAgendaMedico(); 
   }
 
   cargarTurnos() {
@@ -54,7 +60,7 @@ export class HomeUsuariosComponent implements OnInit {
     if (userId) {
       this.turnoService.getTurnos(userId).subscribe({
         next: (data) => {
-          this.turnos = data; // se asigna a los turnos obtenidos
+          this.turnos = data; 
         },
         error: (err) => {
           console.error('Error al cargar los turnos', err);
@@ -69,6 +75,7 @@ export class HomeUsuariosComponent implements OnInit {
     this.especialidadService.obtenerCoberturas().subscribe({
       next: coberturas => {
         this.coberturas = coberturas;
+        console.log('Coberturas cargadas:', this.coberturas);
       },
       error: err => {
         console.error('Error al cargar coberturas:', err.message);
@@ -77,54 +84,62 @@ export class HomeUsuariosComponent implements OnInit {
   }
   
   cargarEspecialidades() {
-    this.especialidadService.obtenerEspecialidades().subscribe((data: any) => {
-      if (data) {
-        this.especialidades = data; 
-        console.log('Especialidades cargadas:', this.especialidades);
-      } else {
-        console.error('Se recibió un objeto :', data); 
-        this.especialidades = []; 
+    this.especialidadService.obtenerEspecialidades().subscribe({
+      next: especialidades => {
+          this.especialidades= especialidades;
+          this.especialidades = this.especialidades.payload;
+          console.log('Especialidades cargadas:', this.especialidades);
+      },
+      error: err => {
+        console.error('Error al cargar especialidades:', err.message);
+      }
+    });
+  }
+ 
+  obtenerUsuarioActual() {
+    this.usuarioService.obtenerUsuarios().subscribe({
+      next: usuarios => {
+        this.usuarios = usuarios.payload; // Asegúrate de acceder correctamente al payload
+        this.usuarioActual = this.usuarios; // Ajusta si es necesario
+        console.log('Usuario actual:', this.usuarioActual);
+      },
+      error: err => {
+        console.error('Error al obtener usuario:', err.message);
+      }
+    });
+  }
+  
+  obtenerAgendaMedico(idMedico: any) {
+    this.agendaService.obtenerAgenda(idMedico).subscribe({
+      next: agendas => {
+        this.agendas = agendas.payload; 
+        this.agenda = this.agendas; 
+        console.log('Agenda cargada:', this.agenda);
+      },
+      error: err => {
+        console.error('Error al cargar la agenda:', err.message);
+      }
+    });
+  }
+  
+  obtenerEspecialidadesMedico() {
+    const idMedico=this.turnoespecialidad;
+    this.especialidadService.obtenerEspecialidadesMedico(idMedico).subscribe({
+      next: especialidadesMedico => {
+        console.log('Especialidades del médico cargadas:', especialidadesMedico);
+      },
+      error: err => {
+        console.error('Error al cargar especialidades del médico:', err.message);
       }
     });
   }
 
-  obtenerUsuarioActual() {
-    const userIdString = localStorage.getItem('userId');
-    if (userIdString) {
-      const userId = Number(userIdString); 
-      this.usuarioService.obtenerUsuario(userId).subscribe({
-        next: (data) => {
-          if (data.codigo === 200) {
-            this.usuarioActual = data.payload[0]; 
-            console.log('Usuario actual:', this.usuarioActual);
-          } else {
-            console.error('Error al obtener usuario:', data.mensaje);
-          }
-        },
-        error: (err) => {
-          console.error('Error al cargar el usuario actual', err);
-        }
-      });
-    } else {
-      console.error('User ID no disponible');
-    }
-  }
-  
-  obtenerAgendaMedico() {
-    const idMedico = this.usuarioActual?.id; // Asumiendo que tienes el ID del médico
-    if (idMedico) {
-      this.agendaService.obtenerAgenda(idMedico).subscribe({
-        next: (data) => {
-          this.agenda = data; // Guarda la agenda
-          console.log('Agenda cargada:', this.agenda);
-        },
-        error: (err) => {
-          console.error('Error al cargar la agenda:', err);
-        }
-      });
-    } else {
-      console.error('ID de médico no disponible');
-    }
+  obtenerMedicosPorEspecialidad(idMedico: any) {
+    this.especialidadService.obtenerMedicoporEspecialidad(idMedico).subscribe((data:any) => {
+      console.log(data)
+        this.profesionales = data.payload;
+        console.log('Médicos por especialidad cargados:', this.profesionales);
+    });
   }
 
   borrarTurno(turno: Turno) {
@@ -177,15 +192,15 @@ export class HomeUsuariosComponent implements OnInit {
   }
 
   onCoberturaChange() {
-    // manejar el cambio de cobertura
+    // Maneja el cambio de cobertura
   }
 
   onEspecialidadChange() {
-    // manejar el cambio de especialidad
+    // Maneja el cambio de especialidad
   }
 
   onFechaChange() {
-    // manejar el cambio de fecha
+    // Maneja el cambio de fecha
   }
 
   agregarTurno() {
@@ -207,7 +222,10 @@ export class HomeUsuariosComponent implements OnInit {
       cobertura: '',
       fecha: new Date(),
       hora: '',
+      profesional: '',
+      especialidad: '',
       notas: '',
+      agenda: '',
     };
   }
 }

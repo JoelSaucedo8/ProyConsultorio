@@ -41,6 +41,9 @@ export class EspecialidadService {
     );
   }
 
+  obtenerMedicoporEspecialidad(idMedico: number): Observable<any[]>{
+    return this.http.get<any[]>(`${API_URL}/obtenerMedicoPorEspecialidad/${idMedico}`, this.obtenerConfigToken());
+  }
   // Obtener especialidades de médico
   obtenerEspecialidadesMedico(idMedico: number): Observable<any[]> {
     return this.http.get<any[]>(`${API_URL}/obtenerEspecialidadesMedico/${idMedico}`, this.obtenerConfigToken());
@@ -50,5 +53,7 @@ export class EspecialidadService {
   crearMedicoEspecialidad(idMedico: number, idEspecialidad: number): Observable<any> {
     const body = { id_medico: idMedico, id_especialidad: idEspecialidad };
     return this.http.post<any>(`${API_URL}/crearMedicoEspecialidad`, body, this.obtenerConfigToken());
+
+
   }
 }

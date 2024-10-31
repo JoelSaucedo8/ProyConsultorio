@@ -27,8 +27,23 @@
               <option *ngFor="let cobertura of coberturas" [value]="cobertura.nombre">{{ cobertura.nombre }}</option>
             </select>
           </div>
-          
 
+          <div class="form-group" *ngIf="turno.cobertura">
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidad" [(ngModel)]="turnoespecialidad" name="especialidad" required (change)="obtenerEspecialidadesMedico()">
+              <option value="" disabled selected>Selecciona una especialidad</option>
+              <option *ngFor="let especialidad of especialidades" [value]="especialidad.id">{{ especialidad.descripcion }}</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="turno.especialidad">
+            <label for="profesional">Profesional:</label>
+            <select id="profesional" [(ngModel)]="turno.profesional" name="profesional" required>
+              <option value="" disabled selected>Selecciona un profesional</option>
+              <option *ngFor="let profesional of profesionales" [value]="profesional.id">{{ profesional.nombre }}</option>
+            </select>
+          </div>
+          
           <div class="form-group" *ngIf="turno.cobertura">
             <label for="fecha">Fecha:</label>
             <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required >
@@ -36,9 +51,9 @@
 
           <div class="form-group" *ngIf="turno.fecha">
             <label for="hora">Hora:</label>
-            <select id="hora" [(ngModel)]="turno.hora" name="hora" required>
+            <select id="hora" [(ngModel)]="turno.agenda" name="hora" required>
               <option value="" disabled selected>Selecciona una hora</option>
-              <option *ngFor="let hora of horasDisponibles" [value]="agenda.horario">{{ hora }}</option>
+              <option *ngFor="let agenda of agendas" [value]="agenda.hora">{{agenda.hora}}</option>
             </select>
           </div>
 
