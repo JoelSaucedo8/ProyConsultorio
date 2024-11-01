@@ -6,6 +6,8 @@ import { TurnoService } from 'src/app/services/turno.service';
 import { EspecialidadService } from 'src/app/services/especialidad.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { AgendaService } from 'src/app/services/agenda.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-home-usuarios',
@@ -31,10 +33,10 @@ export class HomeUsuariosComponent implements OnInit {
   profesionales: any;
   especialidades: any; 
   agendas: any;
-  horasDisponibles: any;
+  horasDisponibles: any[]= [];
   usuarios: any;
   medicos: any;
-  turnoespecialidad:any;
+  turnoespecialidad: any;
 
   // Propiedades para usuario y agenda
   usuarioActual: any;
@@ -53,6 +55,8 @@ export class HomeUsuariosComponent implements OnInit {
     this.cargarCoberturas(); 
     this.cargarEspecialidades();
     this.obtenerUsuarioActual(); 
+    this.cargarHorasDisponibles();
+    this.cargarTurnos(); // Carga los turnos al iniciar el componente
   }
 
   cargarTurnos() {
@@ -60,8 +64,10 @@ export class HomeUsuariosComponent implements OnInit {
     if (userId) {
       this.turnoService.getTurnos(userId).subscribe({
         next: (data) => {
-          this.turnos = data; 
-        },
+          console.log('Datos recibidos de getTurnos:', data); 
+          if (Array.isArray(data.payload)) {
+            this.turnos = data.payload; 
+          }},
         error: (err) => {
           console.error('Error al cargar los turnos', err);
         }
@@ -82,11 +88,11 @@ export class HomeUsuariosComponent implements OnInit {
       }
     });
   }
-  
+
   cargarEspecialidades() {
     this.especialidadService.obtenerEspecialidades().subscribe({
       next: especialidades => {
-          this.especialidades= especialidades;
+          this.especialidades = especialidades;
           this.especialidades = this.especialidades.payload;
           console.log('Especialidades cargadas:', this.especialidades);
       },
@@ -95,12 +101,12 @@ export class HomeUsuariosComponent implements OnInit {
       }
     });
   }
- 
+
   obtenerUsuarioActual() {
     this.usuarioService.obtenerUsuarios().subscribe({
       next: usuarios => {
-        this.usuarios = usuarios.payload; // Asegúrate de acceder correctamente al payload
-        this.usuarioActual = this.usuarios; // Ajusta si es necesario
+        this.usuarios = usuarios.payload; 
+        this.usuarioActual = this.usuarios; 
         console.log('Usuario actual:', this.usuarioActual);
       },
       error: err => {
@@ -108,7 +114,7 @@ export class HomeUsuariosComponent implements OnInit {
       }
     });
   }
-  
+
   obtenerAgendaMedico(idMedico: any) {
     this.agendaService.obtenerAgenda(idMedico).subscribe({
       next: agendas => {
@@ -121,9 +127,9 @@ export class HomeUsuariosComponent implements OnInit {
       }
     });
   }
-  
+
   obtenerEspecialidadesMedico() {
-    const idMedico=this.turnoespecialidad;
+    const idMedico = this.turnoespecialidad;
     this.especialidadService.obtenerEspecialidadesMedico(idMedico).subscribe({
       next: especialidadesMedico => {
         console.log('Especialidades del médico cargadas:', especialidadesMedico);
@@ -135,11 +141,26 @@ export class HomeUsuariosComponent implements OnInit {
   }
 
   obtenerMedicosPorEspecialidad(idMedico: any) {
-    this.especialidadService.obtenerMedicoporEspecialidad(idMedico).subscribe((data:any) => {
-      console.log(data)
-        this.profesionales = data.payload;
+    this.especialidadService.obtenerMedicoporEspecialidad(idMedico).subscribe((data: any) => {
+        console.log(data);
+        if (data.payload && data.payload.length > 0) {
+            this.profesionales = data.payload;
+        } else {
+            this.profesionales = []; 
+            console.warn('No hay especialidades para este médico.');
+        }
         console.log('Médicos por especialidad cargados:', this.profesionales);
     });
+  }
+
+  cargarHorasDisponibles() {
+    console.log('Ejecutando cargarHorasDisponibles');
+    const horas: string[] = [];
+    for (let i = 8; i <= 17; i++) { 
+      horas.push(`${i}:00`);  
+    }
+    this.horasDisponibles = horas; 
+    console.log('Horas disponibles:', this.horasDisponibles);
   }
 
   borrarTurno(turno: Turno) {
@@ -170,7 +191,7 @@ export class HomeUsuariosComponent implements OnInit {
     localStorage.removeItem('userId'); 
     this.router.navigate(['/login']);
   }
-  
+
   mostrarDetalles(turno: Turno) {
     this.turnoSeleccionado = turno;
   }
@@ -183,49 +204,71 @@ export class HomeUsuariosComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  formatearFecha(fecha: Date): string {
-    return fecha.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+  formatearFecha(fecha: any): string {
+    if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+      return fecha.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+      });
+    } else {
+      console.warn('Fecha no válida:', fecha);
+      return ''; 
+    }
   }
-
+  
   onCoberturaChange() {
-    // Maneja el cambio de cobertura
+    // maneja el cambio de cobertura
   }
 
   onEspecialidadChange() {
-    // Maneja el cambio de especialidad
+    // maneja el cambio de especialidad
   }
 
   onFechaChange() {
-    // Maneja el cambio de fecha
+    // maneja el cambio de fecha
   }
 
-  agregarTurno() {
-    this.turnoService.addTurno(this.turno).subscribe({
-      next: () => {
-        alert('Turno agregado con éxito');
-        this.cargarTurnos();
-        this.cerrarPopup(); 
-      },
-      error: (error: any) => {
-        console.error('Error al agregar el turno:', error);
+  agregarTurno(): void {
+    // Valida si todos los campos requeridos del turno están completos
+    if (!this.turno.cobertura || !this.turnoespecialidad ||!this.turno.fecha 
+      || !this.turno.hora || !this.turno.notas) {
+      alert("Por favor, complete todos los campos del turno.");
+      return;
+    }
+  
+    // Crear el objeto turnoData con todos los campos requeridos por la interfaz Turno
+    const turnoData: Turno = {
+      id_paciente: '', // Proporciona un valor predeterminado o se puede dejar vacío
+      cobertura: this.turno.cobertura,
+      especialidad: this.turno.especialidad,
+      profesional: this.turno.profesional,
+      fecha: this.turno.fecha,
+      hora: this.turno.hora,
+      notas: this.turno.notas,
+      agenda: '', // Proporciona un valor predeterminado o se puede dejar vacío
+    };
+  
+    // Llamada al servicio para agregar el turno
+    this.turnoService.addTurno(turnoData).pipe(
+      catchError(err => {
+        console.error('Error al agregar el turno:', err);
+        alert('Error al agregar el turno. Inténtalo nuevamente.');
+        return of(null);
+      })
+    ).subscribe((response: any) => {
+      if (response) {
+        console.log("Turno agregado con éxito");
+        alert("Turno agregado con éxito");
+  
+        // Aquí se mantiene el turno en la pantalla, no se hace reset
+        // Puedes optar por mostrar el turno de alguna forma en la interfaz
+        this.cargarTurnos(); // Opcional: Si necesitas cargar la lista de turnos de nuevo
+  
+        // Opcional: Mostrar el turno agregado en un lugar de la interfaz, si es necesario
+        // Por ejemplo, agregar el turno a una lista visible en la UI
+        this.turnos.push(turnoData); // Agregar el turno a la lista local
       }
     });
   }
-
-  resetTurno() {
-    this.turno = {
-      id_paciente: '',
-      cobertura: '',
-      fecha: new Date(),
-      hora: '',
-      profesional: '',
-      especialidad: '',
-      notas: '',
-      agenda: '',
-    };
-  }
-}
+}  

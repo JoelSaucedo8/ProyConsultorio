@@ -7,6 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatListModule } from '@angular/material/list';
 
 
 // Componentes
@@ -35,6 +39,10 @@ import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.c
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

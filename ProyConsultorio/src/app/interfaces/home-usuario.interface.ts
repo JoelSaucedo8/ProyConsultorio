@@ -1,7 +1,7 @@
 
 export interface Turno {
-agenda: any;
-  id_paciente: any;
+  agenda?: any;
+  id_paciente?: any;
   cobertura: any;
   id?: string | null; 
   fecha: Date;

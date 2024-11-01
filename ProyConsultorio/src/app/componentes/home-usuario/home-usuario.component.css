@@ -1,3 +1,4 @@
+/* Reset de estilos generales */
 * {
   box-sizing: border-box; 
 }
@@ -47,7 +48,7 @@ html, body {
   color: #1b1a1a;
 }
 
-/* contenido principal */
+/* Contenido principal */
 .content-area {
   display: flex;
   flex-grow: 1; 
@@ -57,7 +58,7 @@ html, body {
   overflow-y: auto;
 }
 
-/* contenedor de formularios para alineación */
+/* Contenedor de formularios */
 .form-container {
   background-color: #2f8a55;
   padding: 20px;
@@ -68,12 +69,28 @@ html, body {
   margin: 20px;
 }
 
-/* espacio entre campos del formulario */
+/* Espacio entre campos del formulario */
 .form-group {
-  margin-bottom: 20px; 
+  margin-bottom: 15px; /* Aumenta el espacio entre los campos */
 }
 
-/* formularios */
+/* Estilo uniforme para los campos de formulario */
+select, input[type="text"], input[type="date"], .campoHora, textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Campo de hora específico */
+.campoHora {
+  width: 100%; /* Se ajusta al 100% del contenedor */
+}
+
+/* Lista de turnos */
 .turnos-list {
   max-height: 400px; 
   overflow-y: auto; 
@@ -109,7 +126,7 @@ html, body {
   margin-top: auto; 
 }
 
-/* botones */
+/* Botones */
 .btn-aceptar,
 .btn-cancelar {
   padding: 10px 20px; 
@@ -144,7 +161,13 @@ html, body {
   background-color: #8a0f0d; 
 }
 
-/* ajustar en pantallas pequeñas */
+/* Contenedor para alinear los botones */
+.button-group {
+  display: flex;
+  justify-content: space-between; /* Espacio entre botones */
+}
+
+/* Ajuste en pantallas pequeñas */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -164,7 +187,6 @@ html, body {
     flex-direction: column; 
     align-items: center; 
   }
-
 }
 
 .btn-cerrarsesion {
