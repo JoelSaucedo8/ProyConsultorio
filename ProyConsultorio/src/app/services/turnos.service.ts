@@ -1,58 +1,57 @@
+// src/app/services/turno.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Turno } from 'src/app/Interfaces/turno.interface';
+import { Turno } from '../interfaces/turno.interface';
+import { Profesional } from '../interfaces/profesional.interface'; // Asegúrate de que la ruta sea correcta
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class TurnoService {
-  private apiUrlObtener = 'http://localhost:4000/api/obtenerTurnoPaciente';
-  private apiUrlCrear = 'http://localhost:4000/api/asignarTurnoPaciente';
+  private apiUrl = 'http://tu-api-url.com/api/turnos'; // Cambia esto a la URL de tu API
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todos los turnos
-  obtenerTurnos(userId: number) {
-    return this.http.get<Turno[]>(`/api/turnos/${userId}`);
+  // Obtener turnos de un paciente por ID
+  obtenerTurnoPaciente(pacienteId: number): Observable<Turno[]> {
+    return this.http.get<Turno[]>(`${this.apiUrl}/obtenerTurnoPaciente/${pacienteId}`);
+  }
+
+  // Obtener turnos de un médico (asumido que el médico tiene algún ID)
+  obtenerTurnosMedico(medicoId: number): Observable<Turno[]> {
+    return this.http.post<Turno[]>(`${this.apiUrl}/obtenerTurnosMedico`, { medicoId });
+  }
+
+  // Asignar un turno a un paciente
+  asignarTurnoPaciente(turno: Turno): Observable<Turno> {
+    return this.http.post<Turno>(`${this.apiUrl}/asignarTurnoPaciente`, turno);
+  }
+
+  // Actualizar un turno existente
+  actualizarTurnoPaciente(turno: Turno): Observable<Turno> {
+    return this.http.put<Turno>(`${this.apiUrl}/actualizarTurnoPaciente/${turno.id}`, turno);
+  }
+
+  // Eliminar un turno por ID
+  eliminarTurnoPaciente(turnoId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/eliminarTurnoPaciente/${turnoId}`);
+  }
+
+  obtenerCoberturas(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/coberturas`);
   }
   
-
-  // Obtener coberturas
-  obtenerCoberturas(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrlObtener}/coberturas`);
+  obtenerEspecialidadesPorCobertura(cobertura: string): Observable<string[]> {
+    return this.http.post<string[]>(`${this.apiUrl}/especialidades`, { cobertura });
   }
-
-  // Obtener especialidades según la cobertura
-  obtenerEspecialidades(cobertura: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrlObtener}/especialidades/${cobertura}`);
+  
+  obtenerProfesionalesPorEspecialidad(especialidad: string): Observable<Profesional[]> {
+    return this.http.get<Profesional[]>(`/api/profesionales?especialidad=${especialidad}`);
   }
-
-  // Obtener profesionales según la especialidad
-  obtenerProfesionales(especialidad: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrlObtener}/profesionales/${especialidad}`);
-  }
-
-  // Obtener horas disponibles según fecha y profesional
-  obtenerHorasDisponibles(fecha: Date, profesional: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrlObtener}/horas-disponibles`, {
-      params: {
-        fecha: fecha.toISOString(), // Convertir a ISO string
-        profesional: profesional
-      }
-    });
-  }
-
-  // Crear un nuevo turno
-  // En turnos.service.ts
-crearTurno(userId: number, turno: Turno): Observable<Turno> {
-  const url = `${this.apiUrlCrear}/turnos/${userId}`; // Ejemplo de URL que incluye userId
-  return this.http.post<Turno>(url, turno);
-}
-
-
-  // Borrar un turno por ID
-  borrarTurno(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrlCrear}/turnos/${id}`);
+  
+  obtenerHorasDisponibles(fecha: Date): Observable<string[]> {
+    return this.http.post<string[]>(`${this.apiUrl}/horasDisponibles`, { fecha });
   }
 }

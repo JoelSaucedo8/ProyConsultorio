@@ -14,29 +14,28 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     const storedToken = localStorage.getItem(this.tokenKey);
-    this.loggedIn.next(this.isAuthenticated()); // Estado según autenticación
+    this.loggedIn.next(this.isAuthenticated());
   }
 
-  getUserId(): number | null {
+  getUsuarioId(): number | null {
     const userId = localStorage.getItem('userId');
     return userId ? +userId : null;
   }
 
-  // Método para guardar el token y el rol
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
     const decodedToken = this.decodeToken(token);
-    console.log("Token decodificado:", decodedToken);
-
     const userId = decodedToken?.sub;
     const userRole = decodedToken?.role;
     if (userId) localStorage.setItem('userId', userId);
     if (userRole) localStorage.setItem('userRole', userRole);
-
     this.loggedIn.next(true);
   }
 
-  // Método para decodificar el token
   private decodeToken(token: string): any {
     try {
       return JSON.parse(atob(token.split('.')[1]));
@@ -46,28 +45,20 @@ export class AuthService {
     }
   }
 
-  // Obtener el rol desde el token almacenado
   getRole(): string | null {
     return this.isAuthenticated() ? localStorage.getItem('userRole') : null;
   }
 
-  // Comprobar si el rol es admin
   isAdmin(): boolean {
     return this.getRole() === 'admin';
   }
 
-  // Obtener el rol o retornar "paciente" como valor predeterminado
-  getUserRole(): string {
-    return this.getRole() || 'paciente';
-  }
-
-  // Método de inicio de sesión
   login(usuario: string, password: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = JSON.stringify({ usuario, password });
     return this.http.post(this.apiUrl, body, { headers }).pipe(
       tap((response: any) => {
-        if (response && response.jwt) { // Cambié "token" a "jwt" según tu back
+        if (response && response.jwt) {
           this.setToken(response.jwt);
         }
       }),
@@ -78,7 +69,6 @@ export class AuthService {
     );
   }
 
-  // Verificación de autenticación
   isAuthenticated(): boolean {
     const token = localStorage.getItem(this.tokenKey);
     if (token) {
@@ -86,13 +76,12 @@ export class AuthService {
       if (decodedToken?.exp > Date.now() / 1000) {
         return true;
       } else {
-        this.logout(); // Eliminar el token si expiró
+        this.logout();
       }
     }
     return false;
   }
 
-  // Cierre de sesión
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('userRole');

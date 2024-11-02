@@ -1,159 +1,130 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TurnoService } from 'src/app/services/turnos.service';
-import { Turno } from 'src/app/Interfaces/turno.interface';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
-import { Route, Router } from '@angular/router';
+// src/app/components/home-usuario/home-usuario.component.ts
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { TurnoService } from 'src/app/services/turnos.service'; // Asegúrate que la ruta sea correcta
+import { AuthService } from '../../services/auth.service';
+import { Turno } from 'src/app/interfaces/turno.interface';
+import { Profesional } from 'src/app/interfaces/profesional.interface'; // Asegúrate de que la ruta sea correcta
+
 
 @Component({
   selector: 'app-home-usuario',
   templateUrl: './home-usuario.component.html',
   styleUrls: ['./home-usuario.component.css']
 })
-export class HomeUsuarioComponent implements OnInit, OnDestroy {
-  userId!: number;
+export class HomeUsuarioComponent implements OnInit {
+  turno: Turno = { cobertura: '', especialidad: '', profesional: '', fecha: new Date(), hora: '', notas: '' };
   turnos: Turno[] = [];
-  turno: Turno = {
-    cobertura: '',
-    especialidad: '',
-    profesional: '',
-    fecha: new Date(),
-    hora: '',
-    notas: ''
-  };
-  isAdminUser = false;
+  horasDisponibles: string[] = [];
   coberturas: string[] = [];
   especialidades: string[] = [];
-  profesionales: string[] = [];
-  horasDisponibles: string[] = [];
+  profesionales: Profesional[] = []; // Aquí declaramos la propiedad
   turnoSeleccionado: Turno | null = null;
-  private destroy$ = new Subject<void>();
+  isAdminUser: boolean = false;
+  usuarioNombre: string = 'Nombre Usuario';
 
-  constructor(private turnoService: TurnoService, private authService: AuthService, private router: Router) {}
+  constructor(private turnoService: TurnoService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Cargar el ID del usuario actual
-    const userId = this.authService.getUserId();
-    this.isAdminUser = this.authService.isAdmin(); // Determinar si el usuario es administrador
+    this.loadCoberturas();
     this.cargarTurnos();
-    this.cargarCoberturas();
+    this.loadProfesionales();
+    this.isAdminUser = this.authService.isAdmin(); // Verifica si el usuario es admin
+    this.usuarioNombre = 'Nombre de Usuario'; // O puedes cargarlo desde el servicio
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  loadCoberturas() {
+    // Ejemplo para cargar coberturas desde un servicio
+    this.turnoService.obtenerCoberturas().subscribe(coberturas => {
+      this.coberturas = coberturas;
+    });
   }
+
+  loadProfesionales() {
+    this.turnoService.obtenerProfesionalesPorEspecialidad(this.turno.especialidad).subscribe(profesionales => {
+        this.profesionales = profesionales; // Almacena los profesionales obtenidos
+    });
+}
+
 
   cargarTurnos() {
-    if (this.userId !== undefined) {
-      this.turnoService.obtenerTurnos(this.userId).subscribe(
-        (data: Turno[]) => this.turnos = data,
-        error => this.handleError('Error al cargar los turnos', error)
-      );
-    }
+    const usuarioId = this.authService.getUsuarioId(); // Asumiendo que AuthService tiene este método
+    this.turnoService.obtenerTurnoPaciente(usuarioId).subscribe(turnos => {
+      this.turnos = turnos;
+    });
   }
 
-  cargarCoberturas() {
-    this.turnoService.obtenerCoberturas()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (data: string[]) => this.coberturas = data,
-        error => this.handleError('Error al cargar las coberturas', error)
-      );
+  asignarTurno(turno: Turno) {
+    this.turnoService.asignarTurnoPaciente(turno).subscribe(nuevoTurno => {
+      this.turnos.push(nuevoTurno);
+    });
   }
+
+  actualizarTurno(turno: Turno) {
+    this.turnoService.actualizarTurnoPaciente(turno).subscribe(() => {
+      this.cargarTurnos(); // Recargar turnos después de actualizar
+    });
+  }
+
+  eliminarTurno(turnoId: number | null) {
+    if (turnoId !== null) { // Asegúrate de que turnoId no sea null
+        this.turnoService.eliminarTurnoPaciente(turnoId).subscribe(() => {
+            this.turnos = this.turnos.filter(t => t.id !== turnoId);
+        });
+    } else {
+        console.error('No se puede eliminar el turno porque el ID es nulo');
+    }
+}
+
 
   onCoberturaChange() {
-    this.turnoService.obtenerEspecialidades(this.turno.cobertura)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (data: string[]) => {
-          this.especialidades = data;
-          this.resetEspecialidades();
-        },
-        error => this.handleError('Error al cargar las especialidades', error)
-      );
+    // Aquí debes cargar las especialidades en base a la cobertura seleccionada
+    this.turnoService.obtenerEspecialidadesPorCobertura(this.turno.cobertura).subscribe(especialidades => {
+      this.especialidades = especialidades;
+    });
   }
 
   onEspecialidadChange() {
-    this.turnoService.obtenerProfesionales(this.turno.especialidad)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (data: string[]) => {
-          this.profesionales = data;
-          this.resetProfesionales();
-        },
-        error => this.handleError('Error al cargar los profesionales', error)
-      );
-  }
+    this.turnoService.obtenerProfesionalesPorEspecialidad(this.turno.especialidad).subscribe(profesionales => {
+        this.profesionales = profesionales; // Guarda los profesionales en el array
+
+        // Asegúrate de que profesionales[0] tenga la propiedad 'id' de tipo number
+        if (profesionales.length > 0) {
+            this.turno.profesional = profesionales[0].id; // Asegúrate que 'id' es de tipo number
+        } else {
+            this.turno.profesional = null; // O un valor apropiado si no hay profesionales
+        }
+    }, error => {
+        console.error('Error al cargar los profesionales:', error);
+    });
+}
+
+
+
 
   onFechaChange() {
-    this.turnoService.obtenerHorasDisponibles(this.turno.fecha, this.turno.profesional)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (data: string[]) => this.horasDisponibles = data,
-        error => this.handleError('Error al cargar las horas disponibles', error)
-      );
+    // Cargar las horas disponibles según la fecha seleccionada
+    this.loadHorasDisponibles();
   }
 
-  resetTurno() {
-    this.turno = { cobertura: '', especialidad: '', profesional: '', fecha: new Date(), hora: '', notas: '' };
+  loadHorasDisponibles() {
+    this.turnoService.obtenerHorasDisponibles(this.turno.fecha).subscribe(horas => {
+      this.horasDisponibles = horas; // Cargar horas disponibles según la fecha
+    });
   }
 
-  resetEspecialidades() {
-    this.turno.especialidad = '';
-    this.profesionales = [];
-    this.horasDisponibles = [];
-  }
+  onSubmit(turnoForm: NgForm) {
+    if (turnoForm.valid) {
+      this.turno.usuarioId = this.authService.getUsuarioId(); // Asigna el ID del usuario
 
-  resetProfesionales() {
-    this.turno.profesional = '';
-    this.horasDisponibles = [];
-  }
-
-  cambiarRol() {
-    this.isAdminUser = !this.isAdminUser;
-    alert(`Rol cambiado a ${this.isAdminUser ? 'Admin' : 'Usuario'}`);
-  }
-
-  cancelar() {
-    this.authService.logout(); // Cerrar sesión
-    alert('Sección cerrada.');
-  }
-
-  onSubmit(turnoForm: any) {
-    // Llama a crearTurno pasando tanto userId como el objeto turno
-    this.turnoService.crearTurno(this.userId!, this.turno) // Aquí pasamos ambos argumentos
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (turnoCreado: Turno) => {
-          this.turnos.push(turnoCreado);
-          alert('Turno agregado con éxito');
-          this.resetTurno();
-          turnoForm.resetForm();
-          this.horasDisponibles = [];
-        },
-        error => this.handleError('Error al crear el turno', error)
-      );
-  }
-  
-
-  borrarTurno(id: number | undefined) {
-    if (id === undefined) {
-      console.error('No se puede borrar el turno: ID es undefined');
-      alert('No se pudo borrar el turno. ID inválido.');
-      return;
+      this.turnoService.crearTurno(this.turno).subscribe(response => {
+        console.log('Turno creado:', response);
+        this.cargarTurnos(); // Recargar turnos después de crear uno nuevo
+        turnoForm.reset();
+      }, error => {
+        console.error('Error al crear el turno', error);
+      });
     }
-
-    this.turnoService.borrarTurno(id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        () => {
-          this.turnos = this.turnos.filter(turno => turno.id !== id);
-          alert('Turno borrado con éxito');
-        },
-        error => this.handleError('Error al borrar el turno', error)
-      );
   }
 
   mostrarDetalles(turno: Turno) {
@@ -164,18 +135,20 @@ export class HomeUsuarioComponent implements OnInit, OnDestroy {
     this.turnoSeleccionado = null;
   }
 
-  home() {
-    this.router.navigate(['/home']); // Navegar a la página de inicio
-    console.log("Navegando a la página de inicio");
+  cancelar() {
+    // Lógica para cancelar la operación o cerrar sección
   }
 
-  formatearFecha(fecha: Date): string {
+  cambiarRol() {
+    this.isAdminUser = !this.isAdminUser;
+  }
+
+  formatearFecha(fecha: string) {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
     return new Date(fecha).toLocaleDateString('es-ES', options);
   }
 
-  private handleError(message: string, error: any) {
-    console.error(message, error);
-    alert(`${message}. Error: ${error.message}`);
+  home() {
+    // Lógica para regresar a la página principal
   }
 }

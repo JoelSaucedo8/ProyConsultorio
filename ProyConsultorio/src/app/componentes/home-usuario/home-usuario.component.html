@@ -1,12 +1,13 @@
+<!-- src/app/components/turno/turno.component.html -->
 <body>
   <div class="page-container">
     <!-- Header -->
     <header class="navbar">
       <img src="assets/imagenes/logoClinic.PNG" class="logo" alt="Logo" (click)="home()" />
-      <button (click)="cancelar()">Cerrar Seccion</button>
+      <button (click)="cancelar()">Cerrar Sección</button>
       <div class="user-info">
         <img src="assets/imagenes/user.PNG" class="icon" alt="User Icon" />
-        <span class="font">Nombre Usuario</span>
+        <span class="font">{{ usuarioNombre }}</span>
         <button (click)="cambiarRol()">{{ isAdminUser ? 'Cambiar a Usuario' : 'Cambiar a Admin' }}</button>
       </div>
     </header>
@@ -35,10 +36,11 @@
 
             <div class="form-group" *ngIf="turno.especialidad">
               <label for="profesional">Profesional:</label>
-              <select id="profesional" [(ngModel)]="turno.profesional" name="profesional" required>
-                <option value="" disabled selected>Selecciona un profesional</option>
-                <option *ngFor="let profesional of profesionales" [value]="profesional">{{ profesional }}</option>
-              </select>
+              <select [(ngModel)]="turno.profesional">
+                <option *ngFor="let profesional of profesionales" [value]="profesional.id">
+                  {{ profesional.nombre }}
+                </option>
+              </select>              
             </div>
 
             <div class="form-group" *ngIf="turno.profesional">
