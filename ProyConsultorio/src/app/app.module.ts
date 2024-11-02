@@ -11,7 +11,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 
 // Componentes
 import { FooterComponent } from './componentes/footer/footer.component';
@@ -43,10 +46,18 @@ import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.c
     MatFormFieldModule,
     MatSelectModule,
     MatListModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatToolbarModule,
+    MatNativeDateModule,
   ],
-  providers: [],
+
+  providers: [
+ 
+  ],
+
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }
-
 export class RegisterModule { }

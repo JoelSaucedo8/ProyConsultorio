@@ -1,35 +1,50 @@
+/* Estilos generales para el body y el html */
+html, body {
+  height: 100%; 
+  margin: 0; 
+}
+
+/* Estilos para el contenedor principal */
+.main-container {
+  display: flex; 
+  flex-direction: column; 
+  min-height: 100vh;
+}
+
+/* Estilos para el footer */
 .footer {
-  display: flex; /* Usa flexbox para el footer */
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan si no caben en una línea */
-  justify-content: space-between; /* Espacio entre los elementos */
-  align-items: center; /* Centra verticalmente los elementos */
-  padding: 10px; /* Espaciado interno */
-  background-color: #3ead5a; /* Color de fondo del footer */
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: space-between;
+  align-items: center; 
+  padding: 10px; 
+  background-color: #3ead5a; 
   font-size: 10px;
+  margin-top: auto; 
 }
 
 .footer p {
-  margin: 0 15px; /* Espacio horizontal entre los párrafos */
+  margin: 0 15px;
 }
 
 .social-links {
-  display: flex; /* Usa flexbox para alinear los enlaces sociales */
+  display: flex; 
 }
 
 .social-links a {
-  display: flex; /* Hace que el enlace sea un contenedor flex */
-  align-items: center; /* Centra verticalmente el texto y el icono */
-  margin-left: 10px; /* Espacio entre los enlaces */
-  text-decoration: none; /* Quitar subrayado */
-  color: #212723; /* Color del texto de los enlaces */
+  display: flex; 
+  align-items: center; 
+  margin-left: 10px;
+  text-decoration: none; 
+  color: #212723; 
 }
 
 .social-icon {
-  width: 24px; /* Ajusta el tamaño del icono (ancho) */
-  height: 24px; /* Ajusta el tamaño del icono (alto) */
-  margin-right: 5px; /* Espacio entre el icono y el texto */
+  width: 24px; 
+  height: 24px; 
+  margin-right: 5px; 
 }
 
 .social-links a:hover {
-  text-decoration: underline; /* Subrayar el enlace al pasar el mouse */
+  text-decoration: underline; 
 }
