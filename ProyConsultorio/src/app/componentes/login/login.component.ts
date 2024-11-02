@@ -21,15 +21,13 @@ export class LoginComponent {
   iniciar(): void {
     console.log('Intentando iniciar sesión...');
     this.authService.login(this.usuario, this.password).subscribe(response => {
-        console.log('Respuesta del servidor:', response); // Agrega un log para ver la respuesta completa
-        if (response.codigo === 200) { // Verifica el código de respuesta
-            // Si el código es 200, significa que el inicio de sesión fue exitoso
+        console.log('Respuesta del servidor:', response);
+        if (response.codigo === 200) {
             console.log('Inicio de sesión exitoso:', response);
-            // Aquí puedes obtener otras propiedades de la respuesta, si las hay
             this.router.navigate(['/home-usuario']);
             this.close();
         } else {
-            console.error('Error en las credenciales:', response.mensaje); // Manejo de error
+            console.error('Error en las credenciales:', response.mensaje);
         }
     }, error => {
         console.error('Error en la solicitud de inicio de sesión:', error);

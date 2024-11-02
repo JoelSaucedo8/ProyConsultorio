@@ -10,10 +10,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  userRole: string;
+  userRole: string | null;
 
   constructor(public dialog: MatDialog, private authService: AuthService, private router: Router) {
-    this.userRole = this.authService.getUserRole();
+    this.userRole = this.authService.getRole();
   }
   
 
