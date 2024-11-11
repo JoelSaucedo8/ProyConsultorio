@@ -26,6 +26,7 @@ export class LoginComponent {
       console.log(user)
     this.authService.login(user).subscribe((data:any)=>{
       console.log(data)
+      console.log(data.payload[0].rol); // Esto debería mostrar 'admin'
       this.dialogRef.close()
       localStorage.setItem('token', data.jwt)
       localStorage.setItem('userId',data.payload[0].id)

@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Turno } from 'src/app/interfaces/home-usuario.interface';
-import { DataService } from 'src/app/services/dataservice';
+import { DataService } from 'src/app/services/data.service';
 import { TurnoService } from 'src/app/services/turno.service';
 import { EspecialidadService } from 'src/app/services/especialidad.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { AgendaService } from 'src/app/services/agenda.service';
+import { User } from 'src/app/interfaces/user.interface';
+import { MatTableDataSource } from '@angular/material/table';
+import { UserDialogComponent } from '../user-dialog/user-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
 
 
 @Component({
@@ -14,13 +19,12 @@ import { AgendaService } from 'src/app/services/agenda.service';
   styleUrls: ['./home-usuario.component.css']
 })
 export class HomeUsuariosComponent implements OnInit {
+
   turno: Turno = {
     cobertura: '', especialidad: '',
     fecha: new Date(), hora: '', notas: '', profesional: ''
   };
-
   turnos: Turno[] = [];
-
   popupVisible = false;
   turnoSeleccionado: Turno | null = null;
   coberturas: any;
@@ -28,13 +32,13 @@ export class HomeUsuariosComponent implements OnInit {
   especialidades: any;
   agendas: any;
   horasDisponibles: any[] = [];
-  usuarios: any;
   medicos: any;
   turnoespecialidad: any;
-
-  // Propiedades para usuario y agenda
-  usuarioActual: any;
+  usuarios: User[] = [];
+  usuarioActual: User[] = [];
   agenda: any;
+  displayedColumns: string[] = ['nombre', 'apellido', 'rol', 'acciones'];
+  dataSource = new MatTableDataSource<User>();
 
   constructor(
     private router: Router,
@@ -43,6 +47,7 @@ export class HomeUsuariosComponent implements OnInit {
     private especialidadService: EspecialidadService,
     private usuarioService: UsuarioService,
     private agendaService: AgendaService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -56,7 +61,6 @@ export class HomeUsuariosComponent implements OnInit {
   cargarTurnos(): void {
     const userId = localStorage.getItem('userId');
     const turnosGuardados = localStorage.getItem('turnos');
-  
     this.turnos = turnosGuardados ? JSON.parse(turnosGuardados) : [];
   
     if (!turnosGuardados && userId) {
@@ -64,22 +68,18 @@ export class HomeUsuariosComponent implements OnInit {
         next: response => {
           this.turnos = response?.payload || [];
           localStorage.setItem('turnos', JSON.stringify(this.turnos));
-          console.log("Turnos cargados:", this.turnos);
         },
         error: err => console.error("Error al cargar turnos:", err.message),
       });
     } else if (!userId) {
       console.error("No se encontró el ID del usuario.");
-    } else {
-      console.log("Turnos cargados desde localStorage:", this.turnos);
     }
   }
-  
+
   cargarCoberturas() {
     this.especialidadService.obtenerCoberturas().subscribe({
       next: coberturas => {
         this.coberturas = coberturas;
-        console.log('Coberturas cargadas:', this.coberturas);
       },
       error: err => {
         console.error('Error al cargar coberturas:', err.message);
@@ -91,37 +91,9 @@ export class HomeUsuariosComponent implements OnInit {
     this.especialidadService.obtenerEspecialidades().subscribe({
       next: especialidades => {
         this.especialidades = especialidades;
-        this.especialidades = this.especialidades.payload;
-        console.log('Especialidades cargadas:', this.especialidades);
       },
       error: err => {
         console.error('Error al cargar especialidades:', err.message);
-      }
-    });
-  }
-
-  obtenerUsuarioActual() {
-    this.usuarioService.obtenerUsuarios().subscribe({
-      next: usuarios => {
-        this.usuarios = usuarios.payload;
-        this.usuarioActual = this.usuarios;
-        console.log('Usuario actual:', this.usuarioActual);
-      },
-      error: err => {
-        console.error('Error al obtener usuario:', err.message);
-      }
-    });
-  }
-
-  obtenerAgendaMedico(idMedico: any) {
-    this.agendaService.obtenerAgenda(idMedico).subscribe({
-      next: agendas => {
-        this.agendas = agendas.payload;
-        this.agenda = this.agendas;
-        console.log('Agenda cargada:', this.agenda);
-      },
-      error: err => {
-        console.error('Error al cargar la agenda:', err.message);
       }
     });
   }
@@ -151,14 +123,37 @@ export class HomeUsuariosComponent implements OnInit {
     });
   }
 
+  obtenerUsuarioActual() {
+    this.usuarioService.obtenerUsuarios().subscribe({
+      next: usuarios => {
+        console.log(usuarios)
+        this.dataSource.data = usuarios;
+        console.log(this.dataSource.data)
+      },
+      error: err => {
+        console.error('Error al obtener usuario:', err.message);
+      }
+    });
+  }
+
+  obtenerAgendaMedico(idMedico: any) {
+    this.agendaService.obtenerAgenda(idMedico).subscribe({
+      next: agendas => {
+        this.agendas = agendas.payload;
+        this.agenda = this.agendas;
+      },
+      error: err => {
+        console.error('Error al cargar la agenda:', err.message);
+      }
+    });
+  }
+
   cargarHorasDisponibles() {
-    console.log('Ejecutando cargarHorasDisponibles');
     const horas: string[] = [];
     for (let i = 8; i <= 17; i++) {
       horas.push(`${i}:00`);
     }
     this.horasDisponibles = horas;
-    console.log('Horas disponibles:', this.horasDisponibles);
   }
 
   borrarTurno(turno: Turno) {
@@ -176,18 +171,81 @@ export class HomeUsuariosComponent implements OnInit {
     }
   }
 
-  cancelar() {
-    this.router.navigate(['/']);
+  agregarTurno(): void {
+    if (!this.turno.cobertura || !this.turno.especialidad || !this.turno.fecha
+      || !this.turno.hora || !this.turno.notas) {
+      alert("Por favor, complete todos los campos del turno.");
+      return;
+    }
+
+    const turnoData: Turno = { ...this.turno };
+    this.turnoService.guardarTurno(turnoData).subscribe({
+      next: response => {
+        alert("Turno agregado con éxito");  
+        this.turnos.push(turnoData); 
+        localStorage.setItem('turnos', JSON.stringify(this.turnos));
+      },
+      error: err => {
+        console.error("Error al agregar el turno:", err);
+      }
+    });
   }
 
-  cerrarPopup() {
-    this.popupVisible = false;
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  cerrarsesion() {
+  openDialog(usuario?: User): void {
+    const dialogRef = this.dialog.open(UserDialogComponent, {
+      width: '400px',
+      data: usuario ? { ...usuario } : { nombre: '', apellido: '', rol: 'operador' }
+    });
+  
+    dialogRef.afterClosed().subscribe((result: User) => {
+      if (result) {
+        const usuarioServiceCall = result.id
+          ? this.usuarioService.actualizarUsuario(result.id, result)
+          : this.usuarioService.crearUsuario(result);
+  
+        usuarioServiceCall.subscribe({
+          next: () => this.obtenerUsuarioActual(),
+          error: err => console.error('Error al guardar usuario:', err.message)
+        });
+      }
+    });
+  }
+  
+  
+  eliminarUsuario(usuario: User): void {
+    const confirmacion = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+    if (confirmacion) {
+      this.usuarioService.eliminarUsuario(usuario.id).subscribe({
+        next: () => {
+          // Actualiza la lista de usuarios tras eliminar uno
+          this.obtenerUsuarioActual();
+          alert('Usuario eliminado con éxito');
+        },
+        error: err => {
+          console.error('Error al eliminar usuario:', err.message);
+        }
+      });
+    }
+  }
+  
+
+  onSelectChange(event: MatSelectChange) {
+    console.log(event.value);
+  }
+
+  cerrarSesion() {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     this.router.navigate(['/login']);
+  }
+
+  cancelar() {
+    this.router.navigate(['/']);
   }
 
   mostrarDetalles(turno: Turno) {
@@ -201,54 +259,4 @@ export class HomeUsuariosComponent implements OnInit {
   home(): void {
     this.router.navigate(['/']);
   }
-
-  formatearFecha(fecha: Date): string {
-    if (fecha instanceof Date && !isNaN(fecha.getTime())) {
-      const dia = String(fecha.getDate()).padStart(2, '0'); 
-      const mes = String(fecha.getMonth() + 1).padStart(2, '0'); 
-      const año = fecha.getFullYear();
-      return `${dia}/${mes}/${año}`; 
-    } else {
-      console.warn('Fecha no válida:', fecha);
-      return '';
-    }
-  }
-  
-
-  onCoberturaChange() {
-    // maneja el cambio de cobertura
-  }
-
-  onEspecialidadChange() {
-    // maneja el cambio de especialidad
-  }
-
-  onFechaChange() {
-    // maneja el cambio de fecha
-  }
-
- agregarTurno(): void {
-  // Validación de campos
-  if (!this.turno.cobertura || !this.turno.especialidad || !this.turno.fecha
-    || !this.turno.hora || !this.turno.notas) {
-    alert("Por favor, complete todos los campos del turno.");
-    return;
-  }
-
-  const turnoData: Turno = { ...this.turno };
-
-  this.turnoService.guardarTurno(turnoData).subscribe({
-    next: response => {
-      console.log("Turno agregado con éxito:", response);
-      alert("Turno agregado con éxito");  
-      this.turnos.push(turnoData); 
-      localStorage.setItem('turnos', JSON.stringify(this.turnos)); 
-      // recargar los turnos desde el servidor
-      // this.cargarTurnos(); 
-    },
-    error: err => {
-      console.error("Error al agregar el turno:", err);
-    }
-  });
-}
 }

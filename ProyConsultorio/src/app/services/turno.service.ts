@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs'; // Asegúrate de importar 'of' también
 import { catchError } from 'rxjs/operators'; // Importa catchError aquí
 import { Turno } from '../interfaces/home-usuario.interface';
@@ -32,7 +32,14 @@ export class TurnoService {
   }
 
   guardarTurno(turno: Turno): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/turnos`, turno).pipe(
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `${token}`
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/asignarTurnoPaciente`, turno, 
+      { headers }).pipe(
       catchError(err => {
         console.error("Error al guardar el turno:", err);
         return of(null); 

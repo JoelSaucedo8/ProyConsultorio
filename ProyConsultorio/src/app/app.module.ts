@@ -11,10 +11,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatIconModule} from '@angular/material/icon';
 
 // Componentes
 import { FooterComponent } from './componentes/footer/footer.component';
@@ -23,6 +24,9 @@ import { HomeComponent } from './componentes/home/home.component';
 import { LoginComponent } from './componentes/login/login.component';
 import { RegisterComponent } from './componentes/register/register.component';
 import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.component';
+import { UserDialogComponent } from './componentes/user-dialog/user-dialog.component';
+import { MatTableModule } from '@angular/material/table';
+import { HasRoleDirective } from './has-role.directive';
 
 @NgModule({
   declarations: [
@@ -33,6 +37,8 @@ import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.c
     LoginComponent,
     RegisterComponent,
     HomeUsuariosComponent,
+    UserDialogComponent,
+    HasRoleDirective,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +56,9 @@ import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.c
     MatDatepickerModule,
     MatToolbarModule,
     MatNativeDateModule,
+    MatDialogModule,
+    MatTableModule,
+    MatIconModule
   ],
 
   providers: [
