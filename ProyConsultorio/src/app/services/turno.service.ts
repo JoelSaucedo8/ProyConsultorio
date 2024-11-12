@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs'; // Asegúrate de importar 'of' también
+import { catchError } from 'rxjs/operators'; // Importa catchError aquí
 import { Turno } from '../interfaces/home-usuario.interface';
 
 export interface ApiResponse {
@@ -11,9 +12,9 @@ export interface ApiResponse {
   providedIn: 'root',
 })
 export class TurnoService {
-  private apiUrl = 'http://localhost:4000/api'; 
+  private apiUrl = 'http://localhost:4000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // obtener turnos de un paciente por ID
   getTurnos(userId: string): Observable<ApiResponse> {
@@ -30,14 +31,12 @@ export class TurnoService {
     return this.http.delete<void>(`${this.apiUrl}/eliminarTurnoPaciente/${turnoId}`);
   }
 
-  guardarTurno(turno: Turno) {
-    this.addTurno(turno).subscribe({
-      next: (response) => {
-        console.log('Turno guardado:', response);
-      },
-      error: (err) => {
-        console.error('Error al guardar el turno:', err);
-      }
-    });
-  }  
+  guardarTurno(turno: Turno): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/turnos`, turno).pipe(
+      catchError(err => {
+        console.error("Error al guardar el turno:", err);
+        return of(null); 
+      })
+    );
+  }
 }

@@ -1,9 +1,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lilita+One&display=swap"
+  rel="stylesheet">
 
 <body>
   <div class="page-container">
@@ -19,83 +17,87 @@
       <div class="form-container">
         <h3>Solicitar Turno</h3>
         <form #turnoForm="ngForm">
-          <!--formulario de solicitud de turno -->
-          <div class="form-group">
-            <label for="cobertura">Cobertura:</label>
-            <select id="cobertura" [(ngModel)]="turno.cobertura" name="cobertura" required>
-              <option value="" disabled selected>Selecciona una cobertura</option>
-              <option *ngFor="let cobertura of coberturas" [value]="cobertura.nombre">{{ cobertura.nombre }}</option>
-            </select>
-          </div>
+          <mat-form-field appearance="fill">
+            <mat-label>Cobertura</mat-label>
+            <mat-select [(ngModel)]="turno.cobertura" name="cobertura" required>
+              <mat-option value="" disabled selected>Selecciona una cobertura</mat-option>
+              <mat-option *ngFor="let cobertura of coberturas" [value]="cobertura.nombre">{{ cobertura.nombre
+                }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-          <div class="form-group" *ngIf="turno.cobertura">
-            <label for="especialidad">Especialidad:</label>
-            <select id="especialidad" [(ngModel)]="turnoespecialidad" name="especialidad" required (change)="obtenerEspecialidadesMedico()">
-              <option value="" disabled selected>Selecciona una especialidad</option>
-              <option *ngFor="let especialidad of especialidades" [value]="especialidad.id">{{ especialidad.descripcion }}</option>
-            </select>
-          </div>
+          <mat-form-field appearance="fill" *ngIf="turno.cobertura">
+            <mat-label>Especialidad</mat-label>
+            <mat-select [(ngModel)]="turno.especialidad" name="especialidad" required
+              (change)="obtenerEspecialidadesMedico()">
+              <mat-option value="" disabled selected>Selecciona una especialidad</mat-option>
+              <mat-option *ngFor="let especialidad of especialidades" [value]="especialidad.id">{{
+                especialidad.descripcion }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-          <div class="form-group" *ngIf="turno.especialidad">
-            <label for="profesional">Profesional:</label>
-            <select id="profesional" [(ngModel)]="turno.profesional" name="profesional" required>
-              <option value="" disabled selected>Selecciona un profesional</option>
-              <option *ngFor="let profesional of profesionales" [value]="profesional.id">{{ profesional.nombre }}</option>
-            </select>
-          </div>
-          
-          <div class="form-group" *ngIf="turno.cobertura">
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" [(ngModel)]="turno.fecha" name="fecha" required >
-          </div>
+          <!-- <mat-form-field appearance="fill" *ngIf="turno.especialidad">
+            <mat-label>Profesional</mat-label>
+            <mat-select [(ngModel)]="turno.profesional" name="profesional" required>
+              <mat-option value="" disabled selected>Selecciona un profesional</mat-option>
+              <mat-option *ngFor="let profesional of profesionales" [value]="profesional.id">{{ profesional.nombre }}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
 
-          <div class="form-group" *ngIf="turno.fecha">
-            <label for="hora">Hora:</label>
-            <select id="hora" [(ngModel)]="turno.hora" name="hora" required class="campoHora">
-              <option value="" disabled selected>Selecciona una hora</option>
-              <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
-            </select>
-          </div>
-          
-          
-          <div class="form-group" *ngIf="turno.hora">
-            <label for="notas">Notas:</label>
-            <textarea id="notas" [(ngModel)]="turno.notas" name="notas" required></textarea>
-          </div>
+          <mat-form-field appearance="fill" *ngIf="turno.cobertura">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="turno.fecha" 
+              name="fecha" required (dateChange)="turno.fecha = $event.value">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        
+          <mat-form-field appearance="fill" *ngIf="turno.fecha">
+            <mat-label>Hora</mat-label>
+            <mat-select [(ngModel)]="turno.hora" name="hora" required class="campoHora">
+              <mat-option value="" disabled selected>Selecciona una hora</mat-option>
+              <mat-option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="turno.hora">
+            <mat-label>Notas</mat-label>
+            <textarea matInput [(ngModel)]="turno.notas" name="notas" required></textarea>
+          </mat-form-field>
 
           <div>
-            <!-- agregar click en boton aceptar -->
-            <button type="submit" [disabled]="!turnoForm.valid" (click)="agregarTurno()" class="btn-aceptar">Aceptar</button>
-            <button type="button" (click)="cancelar()" class="btn-cancelar">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!turnoForm.valid"
+              (click)="agregarTurno()">Aceptar</button>
+            <button mat-raised-button type="button" (click)="cancelar()">Cancelar</button>
           </div>
         </form>
       </div>
-      
+
       <div class="form-container">
         <h3>Mis Turnos</h3>
         <div class="turnos-list">
           <div *ngFor="let turno of turnos" class="turno" (click)="mostrarDetalles(turno)">
-            <strong>Cobertura:</strong>{{turno.cobertura}}<br />
-            <strong>Fecha:</strong> {{formatearFecha(turno.fecha) }}<br />
-            <strong>Hora:</strong> {{turno.hora }}<br />
+            <strong>Cobertura:</strong> {{turno.cobertura}}<br />
+            <strong>Fecha:</strong> {{turno.fecha}}<br />
+            <strong>Hora:</strong> {{turno.hora}}<br />
             <strong>Notas:</strong> {{turno.notas}}<br />
-            <button (click)="borrarTurno(turno)">Borrar</button>
+            <button mat-button (click)="borrarTurno(turno)">Borrar</button>
           </div>
         </div>
-             
+
         <div *ngIf="turnoSeleccionado" class="detalles-turno">
-          <!-- modificar tamaño de mostrar detalle -->
           <h4>Detalles del Turno</h4>
           <p>Cobertura: {{ turnoSeleccionado.cobertura }}</p>
-          <p>Fecha: {{ formatearFecha(turnoSeleccionado.fecha) }}</p>
+          <p>Especialidad: {{ turnoSeleccionado.especialidad }}</p>
+          <p>Fecha: {{ turnoSeleccionado.fecha}}</p>
           <p>Hora: {{ turnoSeleccionado.hora }}</p>
           <p>Notas: {{ turnoSeleccionado.notas }}</p>
-          <button (click)="cerrarDetalles()">Cerrar</button>
+          <button mat-button (click)="cerrarDetalles()">Cerrar</button>
         </div>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer"></footer>
   </div>
+  <!-- Footer -->
+  <footer class="footer"></footer>
+
 </body>
