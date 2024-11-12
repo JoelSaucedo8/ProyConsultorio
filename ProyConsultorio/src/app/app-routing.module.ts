@@ -6,6 +6,7 @@ import { RegisterComponent } from './componentes/register/register.component';
 import { FooterComponent } from './componentes/footer/footer.component';
 import { HeaderComponent } from './componentes/header/header.component';
 import { HomeUsuariosComponent } from './componentes/home-usuario/home-usuario.component';
+import { roleGuard } from './guard/role.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,10 +15,18 @@ const routes: Routes = [
   { path: 'footer', component: FooterComponent },
   { path: 'header', component: HeaderComponent },
   { path: 'home-usuario', component: HomeUsuariosComponent },
-  // { path: '', redirectTo: '/login', pathMatch: 'full' },
-  // { path: 'admin', component: AdminComponent },
-  // { path: 'operador', component: OperadorComponent },
-  // { path: 'medico', component: MedicoComponent },
+  {
+    path: 'admin',
+    component: HomeUsuariosComponent,
+    canActivate: [roleGuard],
+    data: { role: 'admin' } // Define el rol necesario para esta ruta
+  },
+  {
+    path: 'user',
+    component: HomeUsuariosComponent,
+    canActivate: [roleGuard],
+    data: { role: 'paciente' } // Define el rol necesario para esta ruta
+  }
 ];
 
 @NgModule({
